@@ -486,56 +486,163 @@ header {
 /* =========================================
    Contact Section
    ========================================= */
+/* =========================================
+   Contact Section
+   ========================================= */
 .contact-card {
-    padding: 4rem 2rem;
-    text-align: center;
+    padding: 3rem;
+    text-align: left;
+    /* Reset to left algin for details */
     background: linear-gradient(135deg, white, var(--color-bg-alt));
+    max-width: 1000px;
+    /* Wider card for grid */
+    margin: 0 auto;
 }
 
-.contact-info {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 3rem;
+.contact-card .section-title {
+    text-align: center;
+    display: block;
+    margin-bottom: 3rem;
 }
 
-.contact-item {
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    /* Restore smaller gap */
+    row-gap: 1rem;
+    align-items: start;
+}
+
+/* Contact Details */
+.contact-details h3 {
+    font-size: 1.8rem;
+    color: var(--color-text-main);
+    margin-bottom: 0.2rem;
+}
+
+.company-sub {
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+    padding-bottom: 0.5rem;
+}
+
+.info-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
-    min-width: 250px;
+    /* Reduced from 1.5rem */
+    margin-bottom: 0.5rem;
+    /* Reduced significantly */
 }
 
-.icon {
-    font-size: 2.5rem;
-    background: var(--color-bg-alt);
-    width: 70px;
-    height: 70px;
+.info-item {
+    display: flex;
+    gap: 0.8rem;
+    align-items: flex-start;
+    /* Default for multi-line */
+}
+
+.icon-small {
+    font-size: 1.4rem;
+    min-width: 25px;
+    height: 1.6rem;
+    /* Match line-height */
     display: flex;
     align-items: center;
+    /* Center icon vertically in its own box */
     justify-content: center;
-    border-radius: 50%;
-    color: var(--color-primary);
-    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.1);
-    transition: transform 0.3s ease;
+    margin-top: 2px;
+    /* Fine-tune optical alignment with text */
 }
 
-.contact-item:hover .icon {
-    transform: scale(1.1) rotate(10deg);
-}
-
-.contact-item p {
-    font-size: 1.1rem;
-    font-weight: 500;
+.info-item p,
+.info-item a {
+    color: var(--color-text-main);
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 .en-address {
     font-size: 0.9rem;
     color: var(--color-text-light);
-    display: block;
+    margin-top: 0.2rem;
+}
+
+/* Social Links */
+.social-links {
+    grid-column: 1 / -1;
+    /* Span full width */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
     margin-top: 0.5rem;
+    /* Reduced margin */
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.website {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.facebook {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.yahoo {
+    background: #fef3c7;
+    color: #b45309;
+}
+
+.blogger {
+    background: #fce7f3;
+    color: #be185d;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Map */
+.contact-map {
+    width: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.map-responsive {
+    position: relative;
+    padding-bottom: 75%;
+    /* 16:9 Aspect Ratio - Tighter height */
+    height: 0;
+    overflow: hidden;
+}
+
+.map-responsive iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
 /* =========================================
@@ -582,11 +689,17 @@ footer {
         display: flex;
     }
 
-    .product-grid {
+    .product-grid,
+    .contact-grid {
         grid-template-columns: 1fr;
     }
 
-    .about-card {
+    .social-links {
+        grid-template-columns: 1fr;
+        /* Stack links on mobile */
+    }
+
+    .contact-card {
         padding: 2rem;
     }
 }
