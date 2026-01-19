@@ -1,0 +1,557 @@
+/* =========================================
+   Design System & Variables (Youthful Campus)
+   ========================================= */
+:root {
+    /* Colors - Vibrant & Energetic */
+    --color-primary: #2563eb;
+    /* Royal Blue - Trust & Vitality */
+    --color-primary-dark: #1e40af;
+    --color-accent: #f59e0b;
+    /* Sunshine Yellow - Energy */
+    --color-highlight: #ec4899;
+    /* Fun Pink - Youthful Pop */
+
+    /* Text */
+    --color-text-main: #1e293b;
+    --color-text-light: #64748b;
+    --color-bg: #ffffff;
+    --color-bg-alt: #f0f9ff;
+    /* Light Blue Tint */
+
+    /* Cards */
+    --card-bg: #ffffff;
+    --card-shadow: 0 10px 40px -10px rgba(37, 99, 235, 0.1);
+    --card-radius: 20px;
+
+    /* Spacing */
+    --section-padding: 6rem 1.5rem;
+    --container-width: 1200px;
+    --header-height: 80px;
+}
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    line-height: 1.7;
+    position: relative;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Nunito', sans-serif;
+    color: var(--color-primary-dark);
+    font-weight: 800;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Dynamic Background */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+    /* Softer background */
+}
+
+/* =========================================
+   Utilities & Components
+   ========================================= */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.glass-panel {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.glass-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+    border: 1px solid rgba(37, 99, 235, 0.05);
+    overflow: hidden;
+}
+
+.glass-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px -10px rgba(37, 99, 235, 0.2);
+}
+
+.section-padding {
+    padding: var(--section-padding);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+}
+
+.section-title::after {
+    /* Fun Underline */
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: 12px;
+    background: var(--color-accent);
+    opacity: 0.3;
+    border-radius: 10px;
+    z-index: -1;
+    transform: rotate(-1deg);
+}
+
+.zh-title {
+    font-size: 1.5rem;
+    color: var(--color-highlight);
+    font-weight: 700;
+    margin-left: 10px;
+    background: none;
+}
+
+.primary-btn {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+}
+
+/* =========================================
+   Header & Nav
+   ========================================= */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: var(--header-height);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-en {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: var(--color-primary);
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.logo-zh {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    font-weight: 600;
+}
+
+.desktop-nav {
+    display: flex;
+    gap: 2.5rem;
+}
+
+.nav-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--color-primary);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.bar {
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-text-main);
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 400px;
+    height: 100vh;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 999;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    transition: right 0.4s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+}
+
+.mobile-menu-overlay.active {
+    right: 0;
+}
+
+.mobile-link {
+    font-size: 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+
+.mobile-link:hover {
+    color: var(--color-primary);
+}
+
+/* =========================================
+   Hero Section
+   ========================================= */
+#hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: var(--header-height);
+    background: radial-gradient(circle at top right, var(--color-bg-alt), transparent 70%);
+}
+
+.hero-content {
+    max-width: 900px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards 0.2s;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-title {
+    font-size: 4.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.4rem;
+    color: var(--color-text-light);
+    margin-bottom: 2.5rem;
+    font-weight: 400;
+}
+
+.hero-zh {
+    font-size: 1.25rem;
+    color: var(--color-highlight);
+    margin-bottom: 3rem;
+    font-weight: 700;
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(236, 72, 153, 0.1);
+    border-radius: 50px;
+}
+
+/* =========================================
+   About Section
+   ========================================= */
+.about-card {
+    padding: 4rem;
+    background: white;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.about-card::before {
+    /* Decorative Circle */
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    width: 100px;
+    height: 100px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    opacity: 0.2;
+    z-index: -1;
+}
+
+.lead-text {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+}
+
+/* =========================================
+   Product Sections
+   ========================================= */
+.category-label {
+    display: block;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-text-light);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.retro-image-container {
+    width: 100%;
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    position: relative;
+    /* Clean, modern style - no retro filters */
+    background: #f1f5f9;
+}
+
+.retro-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.product-card:hover .retro-image-container img {
+    transform: scale(1.1);
+}
+
+.card-content {
+    padding: 2rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.card-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-text-main);
+}
+
+.card-content p {
+    color: var(--color-text-light);
+    font-size: 0.95rem;
+}
+
+/* =========================================
+   Contact Section
+   ========================================= */
+.contact-card {
+    padding: 4rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, white, var(--color-bg-alt));
+}
+
+.contact-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 250px;
+}
+
+.icon {
+    font-size: 2.5rem;
+    background: var(--color-bg-alt);
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--color-primary);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.contact-item:hover .icon {
+    transform: scale(1.1) rotate(10deg);
+}
+
+.contact-item p {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.en-address {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    display: block;
+    margin-top: 0.5rem;
+}
+
+/* =========================================
+   Footer
+   ========================================= */
+footer {
+    padding: 3rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-light);
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* =========================================
+   Animations (Scroll Reveal)
+   ========================================= */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.scroll-reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================================
+   Responsiveness
+   ========================================= */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .desktop-nav {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-card {
+        padding: 2rem;
+    }
+}
