@@ -1,157 +1,34 @@
 /**
  * Black A Beauty - Frontend Logic
- * Agents: CanvasRenderer, ScrollManager, DOMHandler
+ * Libraries: P5.js, WOW.js, Rellax.js
  */
 
+// =========================================
+// 1. Initialization (WOW & Rellax)
+// =========================================
 document.addEventListener('DOMContentLoaded', () => {
-    CanvasRenderer.init();
-    ScrollManager.init();
+    // Initialize Scroll Reveal (WOW.js)
+    new WOW().init();
+
+    // Initialize Parallax (Rellax.js)
+    // Check if element exists to avoid errors on pages without parallax shapes
+    if (document.querySelector('.rellax')) {
+        new Rellax('.rellax', {
+            speed: -2,
+            center: false,
+            wrapper: null,
+            round: true,
+            vertical: true,
+            horizontal: false
+        });
+    }
+
+    // Initialize DOM Handler
     DOMHandler.init();
 });
 
 // =========================================
-// 1. CanvasRenderer (Algorithmic Art - Youthful)
-// =========================================
-const CanvasRenderer = {
-    canvas: null,
-    ctx: null,
-    width: 0,
-    height: 0,
-    particles: [],
-
-    init() {
-        this.canvas = document.getElementById('bg-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.resize();
-
-        window.addEventListener('resize', () => this.resize());
-
-        // Create initial particles
-        const particleCount = window.innerWidth < 768 ? 20 : 50;
-        for (let i = 0; i < particleCount; i++) {
-            this.particles.push(new Particle(this.width, this.height));
-        }
-
-        this.animate();
-    },
-
-    resize() {
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
-        this.canvas.width = this.width;
-        this.canvas.height = this.height;
-    },
-
-    animate() {
-        this.ctx.clearRect(0, 0, this.width, this.height);
-
-        this.particles.forEach(p => {
-            p.update(this.width, this.height);
-            p.draw(this.ctx);
-        });
-
-        requestAnimationFrame(() => this.animate());
-    }
-};
-
-class Particle {
-    constructor(w, h) {
-        this.reset(w, h, true);
-    }
-
-    reset(w, h, initial = false) {
-        this.x = Math.random() * w;
-        this.y = initial ? Math.random() * h : h + 20;
-        this.size = Math.random() * 15 + 5;
-        this.speedY = Math.random() * 1.5 + 0.5; // Faster
-        this.speedX = (Math.random() - 0.5) * 1.5; // More horizontal movement
-        this.rotation = Math.random() * 360;
-        this.rotationSpeed = (Math.random() - 0.5) * 2;
-        this.type = Math.floor(Math.random() * 3); // 0: Circle, 1: Square, 2: Triangle
-
-        // Vibrant Youthful Colors (Low Opacity)
-        const colors = [
-            'rgba(37, 99, 235, 0.1)',   // Royal Blue
-            'rgba(245, 158, 11, 0.15)', // Amber/Gold
-            'rgba(236, 72, 153, 0.1)',  // Pink
-            'rgba(16, 185, 129, 0.1)'   // Emerald
-        ];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    update(w, h) {
-        this.y -= this.speedY; // Float up
-        this.x += this.speedX;
-        this.rotation += this.rotationSpeed;
-
-        if (this.y < -50) {
-            this.reset(w, h);
-        }
-    }
-
-    draw(ctx) {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rotation * Math.PI / 180);
-        ctx.fillStyle = this.color;
-
-        ctx.beginPath();
-        if (this.type === 0) {
-            // Circle
-            ctx.arc(0, 0, this.size / 2, 0, Math.PI * 2);
-        } else if (this.type === 1) {
-            // Square
-            ctx.rect(-this.size / 2, -this.size / 2, this.size, this.size);
-        } else {
-            // Triangle
-            ctx.moveTo(0, -this.size / 2);
-            ctx.lineTo(this.size / 2, this.size / 2);
-            ctx.lineTo(-this.size / 2, this.size / 2);
-            ctx.closePath();
-        }
-        ctx.fill();
-        ctx.restore();
-    }
-}
-
-// =========================================
-// 2. ScrollManager (Scroll Reveal)
-// =========================================
-const ScrollManager = {
-    init() {
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.scroll-reveal').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Handle Header Background on Scroll
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('main-header');
-            if (window.scrollY > 50) {
-                header.style.boxShadow = "var(--glass-shadow)";
-                header.style.background = "rgba(255, 255, 255, 0.95)";
-            } else {
-                header.style.boxShadow = "none";
-                header.style.background = "rgba(255, 255, 255, 0.95)"; // Keep it relatively solid for cleanliness
-            }
-        });
-    }
-};
-
-// =========================================
-// 3. DOMHandler (Interactions)
+// 2. DOMHandler (Interactions)
 // =========================================
 const DOMHandler = {
     init() {
@@ -161,10 +38,12 @@ const DOMHandler = {
         const mobileLinks = document.querySelectorAll('.mobile-link');
         const bars = document.querySelectorAll('.bar');
 
-        menuBtn.addEventListener('click', () => {
-            const isActive = overlay.classList.contains('active');
-            this.toggleMenu(!isActive, overlay, bars);
-        });
+        if (menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                const isActive = overlay.classList.contains('active');
+                this.toggleMenu(!isActive, overlay, bars);
+            });
+        }
 
         // Close menu when a link is clicked
         mobileLinks.forEach(link => {
@@ -181,15 +60,29 @@ const DOMHandler = {
                 if (targetId === '#') return;
 
                 const targetElement = document.querySelector(targetId);
-                const headerOffset = 80;
-                const elementPosition = targetElement.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                if (targetElement) {
+                    const headerOffset = 80;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: "smooth"
-                });
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
             });
+        });
+
+        // Handle Header Background on Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('main-header');
+            if (header) {
+                if (window.scrollY > 50) {
+                    header.style.boxShadow = "var(--card-shadow)";
+                } else {
+                    header.style.boxShadow = "none";
+                }
+            }
         });
     },
 
@@ -209,3 +102,86 @@ const DOMHandler = {
         }
     }
 };
+
+// =========================================
+// 3. P5.js Background Sketch
+// =========================================
+let particles = [];
+
+function setup() {
+    let canvas = createCanvas(windowWidth, windowHeight);
+    canvas.parent('p5-container');
+
+    // Create initial particles
+    let particleCount = windowWidth < 768 ? 20 : 40;
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    noStroke();
+}
+
+function draw() {
+    clear(); // Transparent background
+
+    // Mouse Interaction Vector
+    let mouse = createVector(mouseX, mouseY);
+
+    for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        p.update(mouse);
+        p.display();
+        p.checkEdges();
+    }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
+// Particle Class
+class Particle {
+    constructor() {
+        this.pos = createVector(random(width), random(height));
+        this.vel = p5.Vector.random2D().mult(random(0.5, 1.5));
+        this.acc = createVector(0, 0);
+        this.size = random(10, 30);
+
+        // Random Youthful Colors (RGBA)
+        const colors = [
+            color(37, 99, 235, 30),   // Royal Blue
+            color(245, 158, 11, 40),  // Amber/Gold
+            color(236, 72, 153, 30),  // Pink
+            color(16, 185, 129, 30)   // Emerald
+        ];
+        this.color = random(colors);
+        this.maxSpeed = 2;
+    }
+
+    update(mouse) {
+        // Mouse Repulsion
+        let dir = p5.Vector.sub(this.pos, mouse);
+        if (dir.mag() < 150) {
+            dir.normalize();
+            dir.mult(0.2); // Repulsion force
+            this.acc.add(dir);
+        }
+
+        this.vel.add(this.acc);
+        this.vel.limit(this.maxSpeed);
+        this.pos.add(this.vel);
+        this.acc.mult(0); // Reset accel
+    }
+
+    display() {
+        fill(this.color);
+        ellipse(this.pos.x, this.pos.y, this.size);
+    }
+
+    checkEdges() {
+        if (this.pos.x > width) this.pos.x = 0;
+        if (this.pos.x < 0) this.pos.x = width;
+        if (this.pos.y > height) this.pos.y = 0;
+        if (this.pos.y < 0) this.pos.y = height;
+    }
+}

@@ -64,8 +64,8 @@ a {
     transition: all 0.3s ease;
 }
 
-/* Dynamic Background */
-#bg-canvas {
+/* Dynamic Background (P5.js) */
+#p5-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -74,7 +74,44 @@ a {
     z-index: -1;
     pointer-events: none;
     opacity: 0.6;
-    /* Softer background */
+}
+
+/* Parallax Container (Rellax) */
+.parallax-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    /* Behind content but in front of P5 canvas if needed, or same level */
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.rellax.shape {
+    position: absolute;
+    opacity: 0.4;
+}
+
+.shape-1 {
+    top: 10%;
+    left: 5%;
+}
+
+.shape-2 {
+    top: 40%;
+    right: 10%;
+}
+
+.shape-3 {
+    top: 70%;
+    left: 15%;
+}
+
+.shape-4 {
+    top: 20%;
+    right: 25%;
 }
 
 /* =========================================
@@ -516,15 +553,13 @@ footer {
 /* =========================================
    Animations (Scroll Reveal)
    ========================================= */
-.scroll-reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-.scroll-reveal.active {
-    opacity: 1;
-    transform: translateY(0);
+/* =========================================
+   Animations (Animate.css Overrides if needed)
+   ========================================= */
+/* We rely on animate.css, but we can tweak delay/duration here */
+.wow {
+    visibility: hidden;
+    /* Prevent FOUC */
 }
 
 /* =========================================
