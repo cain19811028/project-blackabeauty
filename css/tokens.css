@@ -1,0 +1,55 @@
+/* Design tokens — plan_20261003.md §3. Contrast ratios there are computed, not guessed. */
+:root {
+  /* paper & ink */
+  --paper: #FFFDF9;
+  --paper-warm: #FBF3EC;
+  --ink: #26232B;
+  --ink-soft: #5B5563;
+  --ink-mute: #6F6876;
+  --line: #EADFD6;
+
+  /* spring sky */
+  --sky-top: #7EC3F0;
+  --sky-mid: #BDE3FA;
+  --sky-haze: #FFF1EC;
+
+  /* sakura — 600 is for large type and icons only (3.6:1) */
+  --sakura-50: #FFF2F6;
+  --sakura-200: #FBCFDD;
+  --sakura-400: #F29BB5;
+  --sakura-600: #D45F86;
+
+  /* accents — gold is decoration only (2.9:1), never text */
+  --shu: #CC3B2B;
+  --shu-deep: #A52C20;
+  --gold: #B8913F;
+  --leaf: #7FB685;
+
+  --font-serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-latin: "Cormorant Garamond", "Times New Roman", serif;
+  --font-script: "Pinyon Script", cursive;
+
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+
+  --maxw: 1200px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --header-h: 72px;
+  --radius: 20px;
+  --shadow-soft: 0 24px 60px -30px rgba(70, 40, 60, .38);
+}
+
+/* Gown colourways: sampled from the shop's photos, corrected for the old flash cast (plan §5.3). */
+.cw-black {
+  --fabric: #2A2D3B; --fabric-shade: #1C1E29; --fabric-deep: #111219; --fabric-hi: #474D63; --fabric-line: #0D0E14;
+}
+.cw-crimson {
+  --fabric: #A61C2E; --fabric-shade: #7F1121; --fabric-deep: #4E0812; --fabric-hi: #CF4456; --fabric-line: #3E0610;
+  --velvet: #1F202C; --velvet-shade: #14151D; --velvet-hi: #43475F;
+}
+.trim-silver { --trim: #C9CED6; --trim-shade: #9AA1AD; --trim-hi: #F7F9FB; --trim-line: #7D8492; }
+.trim-gold { --trim: #E0AE2A; --trim-shade: #AE7E12; --trim-hi: #FFE79A; --trim-line: #7A560A; }
+.cap-black { --cap: #2B2F42; --cap-shade: #1A1D29; --cap-hi: #56607F; --cap-line: #0D0F16; }
+.tassel-silver { --tassel: #E9ECF0; --tassel-shade: #A9B0BB; --tassel-hi: #FFFFFF; }
+.tassel-gold { --tassel: #E8B52E; --tassel-shade: #9C700E; --tassel-hi: #FFE9A0; }
