@@ -557,13 +557,20 @@
 
 /* ---------- 相關產品 ---------- */
 .products { position: relative; padding: clamp(80px, 11vw, 150px) 0 clamp(64px, 9vw, 110px); }
-.products__stage { max-width: 980px; margin: 0 auto; }
+.products__layout {
+  display: grid;
+  /* related products are secondary: each costume renders at about half the height of a hero gown */
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 5vw, 64px);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.products__stage { width: 100%; }
 .products__svg { width: 100%; height: auto; overflow: visible; }
 .costume { transform-origin: 50% 0; animation: hang-sway 6s var(--ease-in-out) infinite alternate; animation-delay: calc(var(--i) * -2s); }
 .products__text {
-  max-width: 780px;
-  margin: clamp(32px, 5vw, 48px) auto 0;
-  text-align: center;
+  text-align: left;
   font-size: clamp(1rem, .95rem + .3vw, 1.12rem);
   line-height: 2.4;
   color: var(--ink-soft);
@@ -579,7 +586,7 @@
   line-height: 1.85;
   white-space: nowrap;
 }
-.products__cta { display: flex; justify-content: center; margin-top: 28px; }
+.products__cta { display: flex; margin-top: 24px; }
 
 /* ---------- contact ---------- */
 .contact { position: relative; padding: clamp(64px, 9vw, 120px) 0 clamp(88px, 11vw, 140px); }
@@ -798,6 +805,10 @@
   .contact__card { grid-template-columns: minmax(0, 1fr); }
   .about__inner { grid-template-columns: minmax(0, 1fr); }
   .about__art { width: min(100%, 520px); margin-inline: auto; }
+  .products__layout { grid-template-columns: minmax(0, 1fr); }
+  .products__stage { max-width: 260px; margin-inline: auto; }
+  .products__text { text-align: center; }
+  .products__cta { justify-content: center; }
   .section-head--left { text-align: center; }
   .section-head--left h2::after { margin-inline: auto; }
 }
