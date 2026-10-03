@@ -179,8 +179,37 @@
     window.addEventListener('scroll', update, { passive: true });
   }
 
+  function initMenu() {
+    const header = document.querySelector('.site-header');
+    const button = header && header.querySelector('.menu-toggle');
+    if (!button) return;
+    const setOpen = (open) => {
+      header.classList.toggle('is-open', open);
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', open ? '關閉選單' : '開啟選單');
+      button.querySelector('use').setAttribute('href', open ? '#i-close' : '#i-menu');
+    };
+    button.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+    header.querySelectorAll('.site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+    document.addEventListener('pointerdown', (e) => { if (!header.contains(e.target)) setOpen(false); });
+  }
+
+  // Tassels on the illustrated graduates sway with the same wind as the petals.
+  function initSceneTassels() {
+    if (BAB.reducedMotion) return;
+    const els = [...document.querySelectorAll('.about__svg .pair-tassel')];
+    if (!els.length) return;
+    const tassels = els.map((el, i) => makeTassel(el, i * 2.3));
+    BAB.ticker.add((t, dt) => {
+      tassels.forEach((ts) => stepTassel(ts, (BAB.wind.at(0) - 0.32) * 12 + Math.sin(t * 1.3 + ts.seed) * 2.5, dt));
+    });
+  }
+
   function init() {
     initHeader();
+    initSceneTassels();
+    initMenu();
     initReveal();
     const hero = document.querySelector('.hero');
     if (!hero) return;
