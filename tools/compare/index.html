@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>黑美人官網 改版前後比對</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@900&display=swap">
+  <style>
+    /* Same paper, ink and seal colours as the site (css/tokens.css), so the frame around the two versions feels like the brand. */
+    :root {
+      --paper: #F4EEE7;
+      --card: #FFFDF9;
+      --ink: #26232B;
+      --ink-soft: #5B5563;
+      --ink-mute: #6F6876;
+      --line: #E4D8CD;
+      --shu: #CC3B2B;
+      --sakura-50: #FFF2F6;
+      --sakura-400: #F29BB5;
+      --sakura-700: #A83A5F;
+      --ease-out: cubic-bezier(.16, 1, .3, 1);
+      --gap: 40px; /* compare.js reads this to size the frames */
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; }
+    button:focus-visible { outline: 2.5px solid var(--sakura-400); outline-offset: 2px; }
+
+    .bar {
+      position: relative;
+      z-index: 2;
+      flex: none;
+      display: grid;
+      gap: 12px;
+      padding: 14px 24px 12px;
+      background: var(--card);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 12px 30px -26px rgba(70, 40, 60, .55);
+    }
+    .bar__row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; }
+
+    .brand { display: flex; align-items: center; gap: 12px; margin: 0 auto 0 0; }
+    .brand__seal {
+      writing-mode: vertical-rl;
+      padding: 6px 3px;
+      border-radius: 3px;
+      background: var(--shu);
+      color: #fff;
+      font: 900 11px/1.05 "Noto Serif TC", serif;
+    }
+    .brand__title { display: block; font: 900 18px/1.3 "Noto Serif TC", serif; letter-spacing: .12em; }
+    .brand__sub { display: block; font-size: 12px; color: var(--ink-mute); letter-spacing: .04em; }
+
+    .seg {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      background: var(--paper);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .seg button {
+      padding: 7px 16px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink-soft);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition: background-color .25s, color .25s;
+    }
+    .seg button[aria-pressed="true"] { background: var(--ink); color: var(--card); }
+    .seg--ab button[aria-pressed="true"][data-v="b"] { background: var(--shu); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--card);
+      box-shadow: inset 0 0 0 1.5px rgba(38, 35, 43, .18);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color .25s, transform .25s var(--ease-out);
+    }
+    .btn:hover { background: var(--paper); transform: translateY(-1px); }
+    .btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      min-width: 0;
+      margin-right: auto;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .chip {
+      flex: none;
+      padding: 5px 14px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      box-shadow: inset 0 0 0 1px var(--line);
+      color: var(--ink-soft);
+      font-size: 13px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color .25s, color .25s, box-shadow .25s;
+    }
+    .chip:hover { background: var(--paper); }
+    .chip.is-active { background: var(--sakura-50); color: var(--sakura-700); box-shadow: inset 0 0 0 1px var(--sakura-400); }
+    .chip small { margin-left: 6px; font-size: 11px; color: var(--sakura-700); }
+
+    .ab { display: none; align-items: center; gap: 10px; }
+    .ab__hint { font-size: 12px; color: var(--ink-mute); }
+    [data-mode="toggle"] .ab { display: flex; }
+
+    .stage {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--gap);
+      padding: 20px 24px 24px;
+    }
+
+    .frame { display: grid; justify-items: center; gap: 12px; margin: 0; }
+    .frame figcaption { display: flex; align-items: center; gap: 8px; height: 26px; color: var(--ink-soft); font-size: 14px; letter-spacing: .06em; }
+    .frame figcaption b {
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--card);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    .frame[data-v="b"] figcaption b { background: var(--shu); }
+
+    /* --w/--h are the logical viewport the site sees; --s scales it to fit. Set by compare.js. */
+    .frame__screen {
+      position: relative;
+      overflow: hidden;
+      width: calc(var(--w) * var(--s) * 1px);
+      height: calc(var(--h) * var(--s) * 1px);
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 0 0 1px var(--line), 0 34px 60px -34px rgba(70, 40, 60, .5);
+    }
+    .frame__screen iframe {
+      display: block;
+      width: calc(var(--w) * 1px);
+      height: calc(var(--h) * 1px);
+      border: 0;
+      transform: scale(var(--s));
+      transform-origin: 0 0;
+    }
+    /* The bezel is drawn with shadows so it takes no layout space; compare.js reserves room for it. */
+    [data-mode="phone"] .frame__screen {
+      border-radius: 32px;
+      box-shadow: 0 0 0 10px #1E1C22, 0 0 0 11px #3B3741, 0 44px 70px -30px rgba(40, 25, 35, .55);
+    }
+    [data-mode="phone"] .frame { gap: 22px; }
+
+    .frame__note {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      gap: 4px;
+      margin: 0;
+      padding: 24px;
+      background: rgba(255, 253, 249, .86);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      color: var(--ink-soft);
+      font: 900 clamp(14px, 1.6vw, 20px)/1.6 "Noto Serif TC", serif;
+      letter-spacing: .08em;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .frame__note.is-on { opacity: 1; }
+    .frame__note span { white-space: nowrap; }
+    .frame__note span:first-child { font: 500 .8em/1.6 "Noto Sans TC", sans-serif; color: var(--ink-mute); }
+
+    /* Toggle: one full-size view, A and B stacked and cross-faded, so depth and light are felt at real scale. */
+    [data-mode="toggle"] .stage { display: block; padding: 0; }
+    [data-mode="toggle"] .frame { position: absolute; inset: 0; display: block; transition: opacity .45s var(--ease-out); }
+    [data-mode="toggle"] .frame:not(.is-shown) { opacity: 0; pointer-events: none; }
+    [data-mode="toggle"] .frame figcaption { display: none; }
+    [data-mode="toggle"] .frame__screen { width: 100%; height: 100%; border-radius: 0; box-shadow: none; }
+    [data-mode="toggle"] .frame__screen iframe { width: 100%; height: 100%; transform: none; }
+
+    .tag {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      z-index: 1;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px 8px 8px;
+      border-radius: 999px;
+      background: rgba(38, 35, 43, .86);
+      color: var(--card);
+      font-size: 14px;
+      letter-spacing: .06em;
+      pointer-events: none;
+      box-shadow: 0 14px 30px -14px rgba(38, 35, 43, .7);
+    }
+    .tag b { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--card); color: var(--ink); font-size: 13px; }
+    .tag.is-b b { background: var(--shu); color: #fff; }
+    [data-mode="toggle"] .tag { display: inline-flex; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body data-mode="phone">
+  <header class="bar">
+    <div class="bar__row">
+      <p class="brand">
+        <span class="brand__seal" aria-hidden="true">黑美人</span>
+        <span>
+          <span class="brand__title">官網改版 前後比對</span>
+          <span class="brand__sub" id="built"></span>
+        </span>
+      </p>
+      <div class="seg" role="group" aria-label="比對方式">
+        <button type="button" data-mode="phone" aria-pressed="true">手機並排</button>
+        <button type="button" data-mode="toggle" aria-pressed="false">桌機切換</button>
+        <button type="button" data-mode="side" aria-pressed="false">桌機並排</button>
+      </div>
+      <button type="button" class="btn" id="replay">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        重播開場
+      </button>
+    </div>
+    <div class="bar__row">
+      <nav class="chips" id="chips" aria-label="跳到段落"></nav>
+      <div class="ab">
+        <span class="ab__hint">鍵盤 A／B 切換</span>
+        <div class="seg seg--ab" role="group" aria-label="顯示版本">
+          <button type="button" data-v="a" aria-pressed="true">A 現行版</button>
+          <button type="button" data-v="b" aria-pressed="false">B 改版</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="stage" id="stage">
+    <figure class="frame is-shown" data-v="a">
+      <figcaption><b>A</b>現行版</figcaption>
+      <div class="frame__screen">
+        <iframe data-src="a/index.html" title="A 現行版"></iframe>
+        <p class="frame__note" role="status"></p>
+      </div>
+    </figure>
+    <figure class="frame" data-v="b">
+      <figcaption><b>B</b>改版</figcaption>
+      <div class="frame__screen">
+        <iframe data-src="b/index.html" title="B 改版"></iframe>
+        <p class="frame__note" role="status"></p>
+      </div>
+    </figure>
+    <p class="tag" id="tag" aria-hidden="true"><b>A</b><span>現行版</span></p>
+  </main>
+
+  <script type="application/json" id="meta">{"__meta__":true}</script>
+  <script src="compare.js" defer></script>
+</body>
+</html>
