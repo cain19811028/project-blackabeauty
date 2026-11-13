@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Layering (plan §4.2): sky 0 → back petals 1 → content 2 → branch 3 → near petals 4 → chrome 10.
+   Layering (plan §4.2): sky 0 → back petals 1 → content 2 → cloud floor, branch 3 → near petals 4 → paper grain 5 → chrome 10.
    Nothing between <body> and these layers may create a stacking context.
    ========================================================================== */
 .petals {
@@ -104,7 +104,8 @@
   min-height: max(100svh, 720px);
   display: grid;
   align-items: center;
-  padding: calc(var(--header-h) + 24px) 0 clamp(72px, 9vw, 112px);
+  /* the bottom room is the cloud floor the gowns stand on */
+  padding: calc(var(--header-h) + 24px) 0 clamp(80px, 9vw, 124px);
   overflow: hidden;
 }
 .hero__sky {
@@ -113,41 +114,71 @@
   z-index: 0;
   background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, var(--sky-haze) 74%, var(--paper) 100%);
 }
-.hero__sky::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 0;
-  height: 34%;
-  background: linear-gradient(rgba(255, 253, 249, 0), var(--paper));
+/* Layers motion.js moves (plan_20261113 §4.1). Each gets its own compositor layer, so moving one never repaints its art. */
+.sunlight, .rays, .clouds, .campus, .bank, .rig, .rig__glow, .gown, .gown__sheen, .hero__copy, .hero__vertical, .hero__branch {
+  will-change: transform;
 }
-.sun {
+
+.sunlight { position: absolute; inset: 0; }
+/* The rays share the sun's box, so turning them pivots about the sun's centre. */
+.sun, .rays {
   position: absolute;
   top: -22%;
   right: 4%;
   width: min(70vw, 760px);
   aspect-ratio: 1;
+}
+.sun {
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 255, 255, .95) 0%, rgba(255, 251, 238, .72) 16%, rgba(255, 243, 226, .28) 38%, rgba(255, 243, 226, 0) 66%);
   animation: sun-breathe 9s var(--ease-in-out) infinite alternate;
 }
-.rays {
+.rays i {
   position: absolute;
-  inset: -10% -10% 0 0;
-  background: repeating-conic-gradient(from 196deg at 78% 4%, rgba(255, 255, 255, 0) 0deg 7deg, rgba(255, 255, 255, .2) 8deg 10deg, rgba(255, 255, 255, 0) 11deg 18deg);
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 78% 4%, #000 0%, transparent 70%);
-  mask-image: radial-gradient(ellipse 70% 80% at 78% 4%, #000 0%, transparent 70%);
-  transform-origin: 78% 4%;
-  animation: rays-drift 16s var(--ease-in-out) infinite alternate;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: var(--w);
+  margin-top: calc(var(--w) / -2);
+  transform-origin: 0 50%;
+  rotate: var(--a);
+  background: linear-gradient(90deg, rgba(255, 252, 242, .62), rgba(255, 252, 242, .24) 32%, rgba(255, 252, 242, 0) 72%);
+  -webkit-mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent);
+  mask-image: linear-gradient(transparent, #000 32%, #000 68%, transparent);
+  animation: beam 13s var(--ease-in-out) var(--d) infinite alternate;
 }
-.clouds, .campus {
+
+.clouds, .campus { position: absolute; left: 0; width: 100%; }
+.clouds { top: 0; height: 100%; }
+/* `translate` drifts on the compositor and composes with the `transform` motion.js writes. */
+.clouds--far { animation: sky-drift 80s var(--ease-in-out) infinite alternate; }
+.clouds--mid { transform-origin: 50% 30%; animation: sky-drift 56s var(--ease-in-out) -20s infinite alternate-reverse; }
+.campus { bottom: 0; height: 42%; }
+
+/* Cloud floor. Each row is a solid band reaching far below the hero with puffs along its top, so it can rise on
+   scroll without opening a gap; the front row is paper-coloured, which is what melts the hero into 關於我們. */
+.bank {
   position: absolute;
   left: 0;
-  width: 100%;
-  will-change: transform;
+  right: 0;
+  bottom: -70vh;
+  background: var(--bank-lit);
+  transform-origin: 50% 0;
 }
-.clouds { top: 0; height: 100%; }
-.campus { bottom: 0; height: 42%; }
-.cloud { animation: cloud-drift var(--dur, 120s) linear infinite alternate; }
+.bank svg {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% - 2px);
+  width: max(100%, 1100px);
+  height: auto;
+  translate: -50% 0;
+}
+/* the far row is squashed flat, the way a distant cloud sea looks at a grazing angle; the campus rises out of it */
+.bank--back { --bank-lit: #F1F6FB; top: calc(100% - clamp(64px, 7vw, 110px)); }
+.bank--back svg { width: 100%; height: clamp(64px, 8vw, 124px); }
+.hero__bank { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+/* at rest only the tops of the near puffs show; scrolling raises the rest */
+.bank--front { --bank-lit: var(--paper); top: calc(100% + clamp(40px, 6vw, 100px)); }
 
 .hero__inner {
   display: grid;
@@ -167,6 +198,7 @@
   transform: rotate(-4deg);
   transform-origin: left center;
 }
+.hero__heading { position: relative; }
 .hero__title {
   font-family: var(--font-serif);
   font-weight: 900;
@@ -190,18 +222,60 @@
 }
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
+/* 落款: the seal is pressed at the lower right of the headline, where a calligrapher signs a scroll. */
+.hero__badge {
+  --size: clamp(78px, 8vw, 104px);
+  --r: -10deg;
+  position: absolute;
+  right: clamp(-28px, -2vw, 0px);
+  bottom: calc(var(--size) * -.98);
+  display: grid;
+  place-content: center;
+  width: var(--size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2.5px solid var(--shu);
+  box-shadow: inset 0 0 0 4px var(--paper), inset 0 0 0 5.5px var(--shu);
+  background: rgba(255, 253, 249, .9);
+  color: var(--shu);
+  text-align: center;
+  font-family: var(--font-serif);
+  line-height: 1.15;
+  transform: rotate(var(--r));
+  animation: stamp .7s var(--ease-out) 1.9s both;
+}
+.hero__badge::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--shu);
+  opacity: 0;
+  animation: ink-ring 1s var(--ease-out) 2.25s;
+}
+.hero__badge b { font-size: calc(var(--size) * .24); font-weight: 900; letter-spacing: .06em; }
+.hero__badge span { font-size: calc(var(--size) * .125); font-weight: 600; letter-spacing: .18em; }
+
 .hero__vertical {
   position: absolute;
-  top: calc(var(--header-h) + 40px);
+  top: 32%;
   left: max(12px, calc((100vw - var(--maxw)) / 2 - 56px));
   z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
   writing-mode: vertical-rl;
   font-family: var(--font-serif);
   font-weight: 600;
   font-size: .85rem;
   letter-spacing: .5em;
   color: var(--ink-soft);
-  opacity: .75;
+}
+.hero__vertical::before {
+  content: "";
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(transparent, rgba(38, 35, 43, .35));
 }
 
 .hero__stage {
@@ -209,37 +283,53 @@
   z-index: 2;
   align-self: end;
 }
-.hero__gowns, .hero__caps { width: 100%; height: auto; overflow: visible; }
-.hero__caps { position: absolute; inset: 0; }
-.hero__gowns .shadows { fill: #3A2A3A; opacity: .16; }
+/* Same 1000×800 frame the gowns and caps were drawn in; the pivot sits on the floor line so tilts read as the stage turning. */
+.rig {
+  position: relative;
+  aspect-ratio: 1000 / 800;
+  transform-origin: 50% 85%;
+}
+.rig__glow, .rig__floor, .gown, .hero__caps { position: absolute; }
+.rig__glow {
+  inset: 6% 6% 20%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .72), rgba(255, 251, 243, .3) 55%, rgba(255, 251, 243, 0));
+}
+.rig__floor {
+  left: -8%;
+  right: -8%;
+  bottom: -8%;
+  height: 22%;
+  background: radial-gradient(closest-side, rgba(255, 247, 230, .95), rgba(255, 247, 230, .45) 55%, rgba(255, 247, 230, 0));
+}
+.gown--bachelor { left: 1%; top: 12.25%; width: 36%; height: 81%; }
+.gown--doctor { left: 63%; top: 12.25%; width: 36%; height: 81%; }
+.gown--master { left: 30%; top: 7%; width: 40%; height: 90%; }
+.gown__art, .gown__sheen { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+/* A tight contact core under the hem plus a wide soft falloff. */
+.gown__shadow {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 93.5%;
+  height: 9%;
+  background:
+    radial-gradient(closest-side, rgba(46, 32, 48, .42), rgba(46, 32, 48, 0) 70%) center / 70% 46% no-repeat,
+    radial-gradient(closest-side, rgba(58, 42, 58, .22), rgba(58, 42, 58, 0));
+}
+/* Colour-dodge with a warm grey roughly doubles what is already lit: folds and trims flare, the black stays black. */
+.gown__sheen { pointer-events: none; mix-blend-mode: color-dodge; }
+.sheen__band {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  transform: translateX(-160px) skewX(-18deg);
+}
+.hero__stage.is-sheen .sheen__band { animation: sheen 1.5s var(--ease-in-out) var(--d) both; }
+.hero__caps { inset: 0; width: 100%; height: 100%; overflow: visible; }
 .cap {
   transform-box: fill-box;
   transform-origin: 50% 50%;
   will-change: transform;
 }
-.hero__badge {
-  position: absolute;
-  bottom: 20%;
-  left: -1%;
-  z-index: 3;
-  display: grid;
-  place-content: center;
-  width: clamp(84px, 9vw, 112px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 2.5px solid var(--shu);
-  box-shadow: inset 0 0 0 4px var(--paper), inset 0 0 0 5.5px var(--shu);
-  background: rgba(255, 253, 249, .88);
-  color: var(--shu);
-  text-align: center;
-  font-family: var(--font-serif);
-  line-height: 1.15;
-  transform: rotate(-10deg);
-  animation: stamp .7s var(--ease-out) 2.3s both;
-  --r: -10deg;
-}
-.hero__badge b { font-size: clamp(1.15rem, .9rem + .8vw, 1.5rem); font-weight: 900; letter-spacing: .06em; }
-.hero__badge span { font-size: clamp(.7rem, .62rem + .3vw, .82rem); font-weight: 600; letter-spacing: .18em; }
 
 .hero__branch {
   position: absolute;
@@ -249,8 +339,8 @@
   width: clamp(280px, 44vw, 660px);
   /* `translate` composes with the parallax `transform` that motion.js writes */
   translate: 9% -10%;
+  transform-origin: 100% 0;
   pointer-events: none;
-  will-change: transform;
 }
 .hero__branch .sway {
   transform-box: view-box;
@@ -262,7 +352,7 @@
   position: absolute;
   left: 50%;
   bottom: 18px;
-  z-index: 2;
+  z-index: 3;
   display: grid;
   justify-items: center;
   gap: 6px;
@@ -299,13 +389,14 @@
   animation: ch-in .95s var(--ease-out) both;
   animation-delay: calc(var(--i) * 45ms + 120ms);
 }
-.js .hero__script, .js .hero__lead, .js .hero__actions, .js .hero__vertical {
+.js .hero__script, .js .hero__lead, .js .hero__actions {
   animation: rise .9s var(--ease-out) both;
 }
 .js .hero__script { animation-delay: .35s; }
 .js .hero__lead { animation-delay: 1.8s; }
 .js .hero__actions { animation-delay: 2.1s; }
-.js .hero__vertical { animation-delay: 1.2s; }
+/* backwards, not both: a held end state would override the opacity motion.js fades it with on scroll */
+.js .hero__vertical { animation: rise-translate .9s var(--ease-out) 1.2s backwards; }
 /* Caps wait for motion.js to launch them; if it never takes over, they appear in place after 3.2s. */
 .js .hero__caps .cap { opacity: 0; animation: appear .01s 3.2s forwards; }
 .js .hero__caps.is-driven .cap { animation: none; }
@@ -359,21 +450,18 @@
 }
 
 /* ---------- 關於我們 ---------- */
-.about { position: relative; padding: clamp(96px, 12vw, 168px) 0 clamp(64px, 9vw, 120px); }
+/* the hero already ends in a paper-white cloud, so 關於我們 needs little top room of its own */
+.about { position: relative; padding: clamp(40px, 5vw, 72px) 0 clamp(64px, 9vw, 120px); }
 .about__inner {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(32px, 5vw, 80px);
 }
-.about__art { margin: 0; }
-/* two candidate illustrations while the owner decides; ?about=sakura switches (see the <head> script) */
-.about__variant--sakura { display: none; }
-.about-sakura .about__variant--pair { display: none; }
-.about-sakura .about__variant--sakura { display: block; }
+.about__art { position: relative; margin: 0; }
+.about__svg { width: 100%; height: auto; overflow: visible; }
 /* origin is set inline at each tassel's knot; motion.js feeds --swing from the wind */
 .pair-tassel { transform-box: view-box; transform: rotate(var(--swing, 0deg)); }
-.about__svg { width: 100%; height: auto; overflow: visible; }
 .about__list li {
   display: flex;
   align-items: baseline;
@@ -743,13 +831,25 @@
   from { transform: scale(1); opacity: .9; }
   to { transform: scale(1.07); opacity: 1; }
 }
-@keyframes rays-drift {
-  from { transform: rotate(-2deg); opacity: .7; }
-  to { transform: rotate(3deg); opacity: 1; }
+@keyframes rise-translate {
+  from { opacity: 0; translate: 0 18px; }
+  to { opacity: 1; translate: none; }
 }
-@keyframes cloud-drift {
-  from { transform: translateX(calc(var(--span, 60px) * -1)); }
-  to { transform: translateX(var(--span, 60px)); }
+@keyframes ink-ring {
+  from { opacity: .55; transform: scale(.92); }
+  to { opacity: 0; transform: scale(1.38); }
+}
+@keyframes beam {
+  from { opacity: .35; rotate: calc(var(--a) - 1.6deg); }
+  to { opacity: 1; rotate: calc(var(--a) + 1.6deg); }
+}
+@keyframes sky-drift {
+  from { translate: -2.5% 0; }
+  to { translate: 2.5% 0; }
+}
+@keyframes sheen {
+  from { transform: translateX(-160px) skewX(-18deg); }
+  to { transform: translateX(760px) skewX(-18deg); }
 }
 @keyframes branch-sway {
   from { transform: rotate(-1.4deg); }

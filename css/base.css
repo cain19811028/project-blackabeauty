@@ -18,12 +18,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Washi grain: a faint fixed paper texture under everything, so flat colour fields feel warm. */
+/* Washi grain: a faint fixed paper texture over the whole page, so flat colour fields feel warm. It sits above the
+   content (below the chrome) so the hero's cloud floor and the paper below it read as one sheet, with no seam. */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 5;
   pointer-events: none;
   opacity: .5;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .34 0 0 0 0 .3 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");

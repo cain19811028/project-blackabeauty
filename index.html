@@ -18,8 +18,6 @@
   <meta property="og:image:height" content="630">
   <script>
     document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
-    // Temporary while the owner compares the two 關於我們 illustrations: ?about=sakura shows the sakura window.
-    if (/[?&]about=sakura\b/.test(location.search)) document.documentElement.classList.add('about-sakura');
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -244,6 +242,16 @@
       </filter>
       <filter id="k-soft" x="-20%" y="-300%" width="140%" height="700%"><feGaussianBlur stdDeviation="9"/></filter>
 
+      <!-- Satin sheen (plan_20261113 §4.1): a gown masks its own light band with a solid white silhouette of itself. -->
+      <filter id="k-silhouette" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+        <feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0"/>
+      </filter>
+      <linearGradient id="k-sheen" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#A39581" stop-opacity="0"/>
+        <stop offset=".5" stop-color="#A39581" stop-opacity=".85"/>
+        <stop offset="1" stop-color="#A39581" stop-opacity="0"/>
+      </linearGradient>
+
       <!-- Sakura blossom: five petals, each cleft at the tip. -->
       <radialGradient id="k-petal-grad" cx="0" cy="0" r="34" gradientUnits="userSpaceOnUse">
         <stop offset="0" stop-color="#EE7FA2"/><stop offset=".38" stop-color="#F9BFD0"/><stop offset="1" stop-color="#FFF2F6"/>
@@ -444,29 +452,15 @@
 
   <main>
     <section class="hero" id="top" aria-labelledby="hero-title">
+      <!-- Depth layers, far to near (plan_20261113 §4.1): sky, sun, far clouds, campus, mid clouds, back cloud bank,
+           [back petals], copy and gowns, front cloud bank, branch, [front petals]. motion.js moves each at its own rate. -->
       <div class="hero__sky" aria-hidden="true">
-        <div class="sun"></div>
-        <div class="rays"></div>
-        <svg class="clouds" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
-          <g class="cloud" style="--dur:140s;--span:70px">
-            <clipPath id="cl-a"><rect x="8" y="0" width="428" height="228"/></clipPath>
-            <clipPath id="cl-a-b"><circle cx="150" cy="196" r="46"/><circle cx="212" cy="166" r="62"/><circle cx="288" cy="176" r="54"/><circle cx="346" cy="200" r="40"/><circle cx="98" cy="214" r="30"/></clipPath>
-            <g clip-path="url(#cl-a)"><g clip-path="url(#cl-a-b)">
-              <rect x="8" y="0" width="428" height="228" fill="#D7E8F7"/>
-              <g fill="#FFFFFF"><circle cx="159" cy="184" r="46"/><circle cx="221" cy="154" r="62"/><circle cx="297" cy="164" r="54"/><circle cx="355" cy="188" r="40"/><circle cx="107" cy="202" r="30"/></g>
-              <g fill="#FFFDF6" opacity=".9"><circle cx="166" cy="176" r="37"/><circle cx="228" cy="146" r="50"/><circle cx="304" cy="156" r="43"/></g>
-            </g></g>
-          </g>
-          <g class="cloud" style="--dur:110s;--span:90px">
-            <clipPath id="cl-b"><rect x="794" y="0" width="456" height="364"/></clipPath>
-            <clipPath id="cl-b-b"><circle cx="940" cy="330" r="46"/><circle cx="1010" cy="290" r="70"/><circle cx="1092" cy="300" r="60"/><circle cx="1160" cy="330" r="44"/><circle cx="884" cy="348" r="30"/></clipPath>
-            <g clip-path="url(#cl-b)"><g clip-path="url(#cl-b-b)">
-              <rect x="794" y="0" width="456" height="364" fill="#D7E8F7"/>
-              <g fill="#FFFFFF"><circle cx="949" cy="318" r="46"/><circle cx="1019" cy="278" r="70"/><circle cx="1101" cy="288" r="60"/><circle cx="1169" cy="318" r="44"/><circle cx="893" cy="336" r="30"/></g>
-              <g fill="#FFFDF6" opacity=".9"><circle cx="956" cy="310" r="37"/><circle cx="1026" cy="270" r="56"/><circle cx="1108" cy="280" r="48"/></g>
-            </g></g>
-          </g>
-          <g class="cloud" style="--dur:90s;--span:50px">
+        <div class="sunlight">
+          <div class="sun"></div>
+          <div class="rays"><i style="--a:126deg;--w:9vmin;--d:-3s"></i><i style="--a:141deg;--w:16vmin;--d:-8s"></i><i style="--a:157deg;--w:6vmin;--d:-12s"></i></div>
+        </div>
+        <svg class="clouds clouds--far" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+          <g>
             <clipPath id="cl-c"><rect x="514" y="0" width="264" height="152"/></clipPath>
             <clipPath id="cl-c-b"><circle cx="604" cy="134" r="24"/><circle cx="644" cy="116" r="34"/><circle cx="688" cy="130" r="26"/></clipPath>
             <g clip-path="url(#cl-c)"><g clip-path="url(#cl-c-b)">
@@ -475,7 +469,7 @@
               <g fill="#FFFDF6" opacity=".9"><circle cx="620" cy="114" r="19"/><circle cx="660" cy="96" r="27"/><circle cx="704" cy="110" r="21"/></g>
             </g></g>
           </g>
-          <g class="cloud" style="--dur:160s;--span:40px">
+          <g>
             <clipPath id="cl-d"><rect x="1200" y="0" width="282" height="172"/></clipPath>
             <clipPath id="cl-d-b"><circle cx="1290" cy="150" r="30"/><circle cx="1340" cy="132" r="42"/><circle cx="1392" cy="150" r="32"/></clipPath>
             <g clip-path="url(#cl-d)"><g clip-path="url(#cl-d-b)">
@@ -485,6 +479,12 @@
             </g></g>
           </g>
         </svg>
+        <div class="bank bank--back">
+          <svg viewBox="0 0 1600 200" preserveAspectRatio="none" aria-hidden="true">
+            <clipPath id="bank-back"><circle cx="90" cy="140" r="80"/><circle cx="230" cy="120" r="95"/><circle cx="380" cy="138" r="78"/><circle cx="520" cy="118" r="100"/><circle cx="660" cy="140" r="80"/><circle cx="800" cy="122" r="96"/><circle cx="950" cy="140" r="82"/><circle cx="1080" cy="116" r="100"/><circle cx="1230" cy="138" r="80"/><circle cx="1370" cy="120" r="94"/><circle cx="1520" cy="136" r="84"/><rect x="0" y="150" width="1600" height="50"/></clipPath>
+            <g clip-path="url(#bank-back)"><rect width="1600" height="200" fill="#D9E6F3"/><g fill="#F1F6FB"><circle cx="99" cy="129" r="80"/><circle cx="239" cy="109" r="95"/><circle cx="389" cy="127" r="78"/><circle cx="529" cy="107" r="100"/><circle cx="669" cy="129" r="80"/><circle cx="809" cy="111" r="96"/><circle cx="959" cy="129" r="82"/><circle cx="1089" cy="105" r="100"/><circle cx="1239" cy="127" r="80"/><circle cx="1379" cy="109" r="94"/><circle cx="1529" cy="125" r="84"/><rect x="0" y="139" width="1600" height="61"/></g></g>
+          </svg>
+        </div>
         <svg class="campus" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
           <path d="M0 250 C120 228 210 240 300 226 C400 212 470 236 560 228 C680 218 760 238 860 226 C980 212 1080 236 1180 224 C1290 212 1370 232 1440 226 L1440 320 L0 320 Z" fill="#DCECF7"/>
           <g fill="#C4DDF0">
@@ -502,6 +502,26 @@
           </g>
           <path d="M592 162 V150 M592 162 L601 167" stroke="#C4DDF0" stroke-width="2.5" stroke-linecap="round"/>
         </svg>
+        <svg class="clouds clouds--mid" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+          <g>
+            <clipPath id="cl-a"><rect x="8" y="0" width="428" height="228"/></clipPath>
+            <clipPath id="cl-a-b"><circle cx="150" cy="196" r="46"/><circle cx="212" cy="166" r="62"/><circle cx="288" cy="176" r="54"/><circle cx="346" cy="200" r="40"/><circle cx="98" cy="214" r="30"/></clipPath>
+            <g clip-path="url(#cl-a)"><g clip-path="url(#cl-a-b)">
+              <rect x="8" y="0" width="428" height="228" fill="#D7E8F7"/>
+              <g fill="#FFFFFF"><circle cx="159" cy="184" r="46"/><circle cx="221" cy="154" r="62"/><circle cx="297" cy="164" r="54"/><circle cx="355" cy="188" r="40"/><circle cx="107" cy="202" r="30"/></g>
+              <g fill="#FFFDF6" opacity=".9"><circle cx="166" cy="176" r="37"/><circle cx="228" cy="146" r="50"/><circle cx="304" cy="156" r="43"/></g>
+            </g></g>
+          </g>
+          <g>
+            <clipPath id="cl-b"><rect x="794" y="0" width="456" height="364"/></clipPath>
+            <clipPath id="cl-b-b"><circle cx="940" cy="330" r="46"/><circle cx="1010" cy="290" r="70"/><circle cx="1092" cy="300" r="60"/><circle cx="1160" cy="330" r="44"/><circle cx="884" cy="348" r="30"/></clipPath>
+            <g clip-path="url(#cl-b)"><g clip-path="url(#cl-b-b)">
+              <rect x="794" y="0" width="456" height="364" fill="#D7E8F7"/>
+              <g fill="#FFFFFF"><circle cx="949" cy="318" r="46"/><circle cx="1019" cy="278" r="70"/><circle cx="1101" cy="288" r="60"/><circle cx="1169" cy="318" r="44"/><circle cx="893" cy="336" r="30"/></g>
+              <g fill="#FFFDF6" opacity=".9"><circle cx="956" cy="310" r="37"/><circle cx="1026" cy="270" r="56"/><circle cx="1108" cy="280" r="48"/></g>
+            </g></g>
+          </g>
+        </svg>
       </div>
 
       <p class="hero__vertical" aria-hidden="true">黑美人服飾開發有限公司</p>
@@ -509,7 +529,10 @@
       <div class="container hero__inner">
         <div class="hero__copy">
           <p class="hero__script" lang="en" data-copy="new">Congratulations on your graduation</p>
-          <h1 class="hero__title" id="hero-title"><span class="nw">這一天的你，</span><br><span class="nw">值得一件<span class="hl">好禮服</span>。</span></h1>
+          <div class="hero__heading">
+            <h1 class="hero__title" id="hero-title"><span class="nw">這一天的你，</span><br><span class="nw">值得一件<span class="hl">好禮服</span>。</span></h1>
+            <p class="hero__badge" data-copy="new"><b>三十年</b><span>直營工廠</span></p>
+          </div>
           <p class="hero__lead"><span class="nw">本公司專營</span><span class="nw">國內外各大學之</span><span class="nw">博士、碩士、學士服</span></p>
           <div class="hero__actions">
             <a class="btn btn--primary" href="tel:073493832"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>撥打 (07)3493832</a>
@@ -518,23 +541,49 @@
         </div>
 
         <div class="hero__stage">
-          <p class="hero__badge" data-copy="new"><b>三十年</b><span>直營工廠</span></p>
-          <svg class="hero__gowns" viewBox="0 0 1000 800" role="img" aria-label="學士服、碩士服、博士服插畫">
-            <g class="shadows" filter="url(#k-soft)">
-              <ellipse cx="190" cy="734" rx="140" ry="13"/>
-              <ellipse cx="500" cy="762" rx="160" ry="15"/>
-              <ellipse cx="810" cy="734" rx="140" ry="13"/>
-            </g>
-            <g filter="url(#k-grain)">
-              <use class="cw-black trim-silver" href="#k-bachelor" x="10" y="98" width="360" height="648"/>
-              <use class="cw-crimson" href="#k-doctor" x="630" y="98" width="360" height="648"/>
-              <use class="cw-black trim-gold" href="#k-master" x="300" y="56" width="400" height="720"/>
-            </g>
-          </svg>
-          <svg class="hero__caps" viewBox="0 0 1000 800" aria-hidden="true">
-            <g class="cap cap-black tassel-silver"><use href="#k-cap" x="103.6" y="139.4" width="172.8" height="144"/></g>
-            <g class="cap cap-black tassel-gold"><use href="#k-cap" x="404" y="102" width="192" height="160"/></g>
-            <g class="cap cap-black tassel-gold"><use href="#k-cap" x="723.6" y="139.4" width="172.8" height="144"/></g>
+          <!-- Each gown is its own layer so the pointer can set them at different depths without repainting the grain. -->
+          <div class="rig" role="img" aria-label="學士服、碩士服、博士服插畫">
+            <div class="rig__glow"></div>
+            <div class="rig__floor"></div>
+            <div class="gown gown--bachelor">
+              <span class="gown__shadow"></span>
+              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-black trim-silver" href="#k-bachelor" width="400" height="720"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+                <mask id="sheen-bachelor" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-black trim-silver" href="#k-bachelor" width="400" height="720" filter="url(#k-silhouette)"/></mask>
+                <g mask="url(#sheen-bachelor)"><rect class="sheen__band" style="--d:0s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
+              </svg>
+            </div>
+            <div class="gown gown--doctor">
+              <span class="gown__shadow"></span>
+              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-crimson" href="#k-doctor" width="400" height="720"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+                <mask id="sheen-doctor" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-crimson" href="#k-doctor" width="400" height="720" filter="url(#k-silhouette)"/></mask>
+                <g mask="url(#sheen-doctor)"><rect class="sheen__band" style="--d:.28s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
+              </svg>
+            </div>
+            <div class="gown gown--master">
+              <span class="gown__shadow"></span>
+              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-black trim-gold" href="#k-master" width="400" height="720"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+                <mask id="sheen-master" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-black trim-gold" href="#k-master" width="400" height="720" filter="url(#k-silhouette)"/></mask>
+                <g mask="url(#sheen-master)"><rect class="sheen__band" style="--d:.14s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
+              </svg>
+            </div>
+            <!-- Caps share one layer so the opening toss can fly them across the whole stage; order matches the gowns, left to right. -->
+            <svg class="hero__caps" viewBox="0 0 1000 800" aria-hidden="true">
+              <g class="cap cap-black tassel-silver"><use href="#k-cap" x="103.6" y="139.4" width="172.8" height="144"/></g>
+              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="404" y="102" width="192" height="160"/></g>
+              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="723.6" y="139.4" width="172.8" height="144"/></g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__bank" aria-hidden="true">
+        <div class="bank bank--front">
+          <svg viewBox="0 0 1600 200" aria-hidden="true">
+            <clipPath id="bank-front"><circle cx="40" cy="150" r="70"/><circle cx="150" cy="135" r="85"/><circle cx="290" cy="145" r="75"/><circle cx="410" cy="128" r="95"/><circle cx="560" cy="148" r="70"/><circle cx="680" cy="132" r="88"/><circle cx="820" cy="146" r="72"/><circle cx="950" cy="126" r="98"/><circle cx="1100" cy="147" r="74"/><circle cx="1220" cy="134" r="86"/><circle cx="1360" cy="144" r="76"/><circle cx="1490" cy="130" r="92"/><circle cx="1600" cy="148" r="70"/><rect x="0" y="150" width="1600" height="50"/></clipPath>
+            <g clip-path="url(#bank-front)"><rect width="1600" height="200" fill="#ECE8F0"/><g fill="#FFFDF9"><circle cx="49" cy="139" r="70"/><circle cx="159" cy="124" r="85"/><circle cx="299" cy="134" r="75"/><circle cx="419" cy="117" r="95"/><circle cx="569" cy="137" r="70"/><circle cx="689" cy="121" r="88"/><circle cx="829" cy="135" r="72"/><circle cx="959" cy="115" r="98"/><circle cx="1109" cy="136" r="74"/><circle cx="1229" cy="123" r="86"/><circle cx="1369" cy="133" r="76"/><circle cx="1499" cy="119" r="92"/><circle cx="1609" cy="137" r="70"/><rect x="0" y="139" width="1600" height="61"/></g></g>
           </svg>
         </div>
       </div>
@@ -559,7 +608,6 @@
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="container about__inner">
         <figure class="about__art" data-reveal>
-          <div class="about__variant about__variant--pair">
           <svg class="about__svg" viewBox="0 0 640 600" role="img" aria-label="插畫：一男一女兩位穿著紅色學位袍的畢業生面對面聊天">
           <defs>
             <clipPath id="ap-window"><path d="M84 580 L84 280 A236 236 0 0 1 556 280 L556 580 Z"/></clipPath>
@@ -755,75 +803,6 @@
             <g class="bloom" style="--i:0"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(440 138) rotate(10) scale(0.55)"/></g><g class="bloom" style="--i:1"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(476 116) rotate(40) scale(0.65)"/></g><g class="bloom" style="--i:2"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(508 98) rotate(-20) scale(0.5)"/></g><g class="bloom" style="--i:3"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(540 80) rotate(15) scale(0.6)"/></g><g class="bloom" style="--i:4"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(574 70) rotate(50) scale(0.55)"/></g><g class="bloom" style="--i:5"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(612 58) rotate(-10) scale(0.6)"/></g><g class="bloom" style="--i:6"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(526 26) rotate(20) scale(0.5)"/></g><g class="bloom" style="--i:7"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(554 50) rotate(0) scale(0.45)"/></g><g class="bloom" style="--i:8"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(494 126) rotate(70) scale(0.45)"/></g>
           </g>
         </svg>
-          </div>
-          <div class="about__variant about__variant--sakura">
-          <svg class="about__svg" viewBox="0 0 640 560" role="img" aria-label="櫻花插畫：圓窗中的櫻花樹、石燈籠與和傘">
-          <defs>
-            <clipPath id="ab-window"><circle cx="320" cy="270" r="226"/></clipPath>
-            <linearGradient id="ab-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CBE7FA"/><stop offset=".62" stop-color="#FFF4EE"/></linearGradient>
-            <radialGradient id="ab-sun" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(440 110) scale(180)">
-              <stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="320" cy="282" r="234" fill="#3A2A3A" opacity=".08" filter="url(#k-soft)"/>
-          <g clip-path="url(#ab-window)" filter="url(#k-grain-light)">
-            <rect x="80" y="40" width="480" height="470" fill="url(#ab-sky)"/>
-            <rect x="80" y="40" width="480" height="470" fill="url(#ab-sun)"/>
-            <!-- the scene sits slightly inside the frame so the narrow bottom of the circle does not crop it -->
-            <g transform="translate(320 262) scale(.9) translate(-320 -270)">
-            <path d="M0 330 C100 300 232 300 302 284 C382 266 462 300 640 270 L640 560 L0 560 Z" fill="#D7EDDF"/>
-            <clipPath id="ab-far-l"><circle cx="150" cy="318" r="30"/><circle cx="180" cy="304" r="36"/><circle cx="214" cy="318" r="26"/></clipPath><g clip-path="url(#ab-far-l)"><rect x="94" y="248" width="176" height="126" fill="#F2B7C8"/><g fill="#F8CFDB"><circle cx="159" cy="306" r="30"/><circle cx="189" cy="292" r="36"/><circle cx="223" cy="306" r="26"/></g><g fill="#FFE9F0" opacity=".9"><circle cx="166" cy="296" r="22"/><circle cx="196" cy="282" r="26"/><circle cx="230" cy="296" r="19"/></g></g><clipPath id="ab-far-r"><circle cx="476" cy="312" r="28"/><circle cx="506" cy="298" r="34"/><circle cx="540" cy="314" r="24"/></clipPath><g clip-path="url(#ab-far-r)"><rect x="422" y="244" width="172" height="124" fill="#F2B7C8"/><g fill="#F8CFDB"><circle cx="485" cy="300" r="28"/><circle cx="515" cy="286" r="34"/><circle cx="549" cy="302" r="24"/></g><g fill="#FFE9F0" opacity=".9"><circle cx="492" cy="290" r="20"/><circle cx="522" cy="276" r="24"/><circle cx="556" cy="292" r="17"/></g></g>
-            <path d="M0 376 C140 344 262 360 342 344 C422 330 520 356 640 340 L640 560 L0 560 Z" fill="#C3E2CB"/>
-            <path d="M0 432 C200 410 420 412 640 428 L640 560 L0 560 Z" fill="#B5D9A3"/>
-            <path d="M0 432 C200 410 420 412 640 428 L640 438 C420 422 200 420 0 442 Z" fill="#CFE6BF"/>
-            <!-- trunk and limbs -->
-            <g fill="#6E5452">
-              <path d="M282 482 C290 440 286 400 296 360 C304 330 320 310 330 296 L344 300 C334 318 322 340 316 366 C308 404 314 444 318 482 Z"/>
-              <path d="M300 360 C270 330 240 316 200 306 L202 296 C244 304 276 318 306 348 Z"/>
-              <path d="M322 320 C350 300 390 288 430 286 L430 296 C392 298 356 310 330 330 Z"/>
-              <path d="M328 300 C330 270 336 240 350 214 L358 218 C346 244 340 272 338 302 Z"/>
-            </g>
-            <path d="M282 482 C290 440 286 400 296 360 C300 344 306 332 312 322 L314 330 C306 344 302 360 300 376 C294 410 296 446 298 482 Z" fill="#573F3D"/>
-            <path d="M316 366 C322 340 334 318 344 300 L340 298 C330 316 320 338 312 364 C306 400 310 444 314 482 L318 482 C314 444 310 404 316 366 Z" fill="#8C716C"/>
-            <clipPath id="ab-canopy"><circle cx="340" cy="196" r="76"/><circle cx="264" cy="212" r="70"/><circle cx="418" cy="210" r="66"/><circle cx="200" cy="250" r="60"/><circle cx="470" cy="252" r="54"/><circle cx="300" cy="266" r="60"/><circle cx="390" cy="262" r="58"/><circle cx="150" cy="286" r="38"/><circle cx="512" cy="290" r="34"/></clipPath><g clip-path="url(#ab-canopy)"><rect x="54" y="100" width="554" height="286" fill="#EE9DB5"/><g fill="#F7BDCE"><circle cx="349" cy="184" r="76"/><circle cx="273" cy="200" r="70"/><circle cx="427" cy="198" r="66"/><circle cx="209" cy="238" r="60"/><circle cx="479" cy="240" r="54"/><circle cx="309" cy="254" r="60"/><circle cx="399" cy="250" r="58"/><circle cx="159" cy="274" r="38"/><circle cx="521" cy="278" r="34"/></g><g fill="#FFE2EA" opacity=".9"><circle cx="356" cy="174" r="55"/><circle cx="280" cy="190" r="50"/><circle cx="434" cy="188" r="48"/><circle cx="216" cy="228" r="43"/></g></g>
-            <g class="about__blooms"><g class="bloom" style="--i:0"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(186 214) rotate(10) scale(0.45)"/></g><g class="bloom" style="--i:1"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(226 176) rotate(40) scale(0.5)"/></g><g class="bloom" style="--i:2"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(282 146) rotate(-10) scale(0.55)"/></g><g class="bloom" style="--i:3"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(338 120) rotate(20) scale(0.6)"/></g><g class="bloom" style="--i:4"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(396 138) rotate(50) scale(0.5)"/></g><g class="bloom" style="--i:5"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(452 166) rotate(-30) scale(0.55)"/></g><g class="bloom" style="--i:6"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(500 214) rotate(15) scale(0.45)"/></g><g class="bloom" style="--i:7"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(530 268) rotate(30) scale(0.4)"/></g><g class="bloom" style="--i:8"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(128 264) rotate(0) scale(0.4)"/></g><g class="bloom" style="--i:9"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(168 300) rotate(60) scale(0.4)"/></g><g class="bloom" style="--i:10"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(250 290) rotate(-20) scale(0.45)"/></g><g class="bloom" style="--i:11"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(330 302) rotate(25) scale(0.5)"/></g><g class="bloom" style="--i:12"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(420 300) rotate(-15) scale(0.45)"/></g><g class="bloom" style="--i:13"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(478 296) rotate(45) scale(0.4)"/></g><g class="bloom" style="--i:14"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(372 224) rotate(10) scale(0.4)"/></g><g class="bloom" style="--i:15"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(300 214) rotate(70) scale(0.4)"/></g><g class="bloom" style="--i:16"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(236 240) rotate(5) scale(0.35)"/></g><g class="bloom" style="--i:17"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(450 238) rotate(-40) scale(0.35)"/></g></g>
-            <!-- stone wall from the shop's old sakura photo -->
-            <g><ellipse cx="42" cy="449" rx="21" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="45" cy="446" rx="15" ry="6" fill="#D2CCC3"/><ellipse cx="88" cy="448" rx="21" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="91" cy="444" rx="15" ry="4" fill="#D2CCC3"/><ellipse cx="135" cy="449" rx="22" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="138" cy="446" rx="16" ry="6" fill="#D2CCC3"/><ellipse cx="178" cy="446" rx="17" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="181" cy="444" rx="11" ry="4" fill="#D2CCC3"/><ellipse cx="221" cy="448" rx="22" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="224" cy="444" rx="16" ry="4" fill="#D2CCC3"/><ellipse cx="264" cy="446" rx="16" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="266" cy="443" rx="10" ry="3" fill="#D2CCC3"/><ellipse cx="305" cy="447" rx="21" ry="9" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="308" cy="444" rx="15" ry="4" fill="#D2CCC3"/><ellipse cx="346" cy="446" rx="16" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="349" cy="443" rx="10" ry="3" fill="#D2CCC3"/><ellipse cx="380" cy="448" rx="14" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="384" cy="445" rx="8" ry="5" fill="#D2CCC3"/><ellipse cx="419" cy="448" rx="20" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="422" cy="444" rx="14" ry="4" fill="#D2CCC3"/><ellipse cx="460" cy="448" rx="16" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="462" cy="445" rx="10" ry="5" fill="#D2CCC3"/><ellipse cx="494" cy="449" rx="14" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="497" cy="446" rx="8" ry="6" fill="#D2CCC3"/><ellipse cx="534" cy="446" rx="22" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="537" cy="443" rx="16" ry="3" fill="#D2CCC3"/><ellipse cx="574" cy="446" rx="14" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="578" cy="443" rx="8" ry="3" fill="#D2CCC3"/><ellipse cx="610" cy="446" rx="17" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="613" cy="444" rx="11" ry="4" fill="#D2CCC3"/><ellipse cx="57" cy="466" rx="14" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="60" cy="463" rx="8" ry="6" fill="#D2CCC3"/><ellipse cx="96" cy="464" rx="21" ry="9" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="99" cy="461" rx="15" ry="4" fill="#D2CCC3"/><ellipse cx="142" cy="465" rx="21" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="145" cy="462" rx="15" ry="5" fill="#D2CCC3"/><ellipse cx="184" cy="465" rx="17" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="187" cy="462" rx="11" ry="5" fill="#D2CCC3"/><ellipse cx="222" cy="466" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="226" cy="462" rx="12" ry="6" fill="#D2CCC3"/><ellipse cx="262" cy="464" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="266" cy="462" rx="12" ry="4" fill="#D2CCC3"/><ellipse cx="299" cy="466" rx="14" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="302" cy="462" rx="8" ry="6" fill="#D2CCC3"/><ellipse cx="332" cy="464" rx="15" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="335" cy="462" rx="9" ry="4" fill="#D2CCC3"/><ellipse cx="369" cy="464" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="372" cy="462" rx="12" ry="4" fill="#D2CCC3"/><ellipse cx="406" cy="466" rx="15" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="409" cy="462" rx="9" ry="6" fill="#D2CCC3"/><ellipse cx="443" cy="464" rx="18" ry="9" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="446" cy="461" rx="12" ry="4" fill="#D2CCC3"/><ellipse cx="482" cy="465" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="486" cy="462" rx="12" ry="5" fill="#D2CCC3"/><ellipse cx="522" cy="463" rx="18" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="526" cy="460" rx="12" ry="3" fill="#D2CCC3"/><ellipse cx="560" cy="465" rx="15" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="563" cy="462" rx="9" ry="5" fill="#D2CCC3"/><ellipse cx="594" cy="464" rx="16" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="598" cy="462" rx="10" ry="4" fill="#D2CCC3"/><ellipse cx="630" cy="466" rx="16" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="632" cy="463" rx="10" ry="6" fill="#D2CCC3"/><ellipse cx="40" cy="482" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="42" cy="478" rx="12" ry="4" fill="#D2CCC3"/><ellipse cx="77" cy="480" rx="15" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="80" cy="477" rx="9" ry="3" fill="#D2CCC3"/><ellipse cx="110" cy="480" rx="14" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="113" cy="478" rx="8" ry="4" fill="#D2CCC3"/><ellipse cx="145" cy="480" rx="17" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="148" cy="477" rx="11" ry="3" fill="#D2CCC3"/><ellipse cx="188" cy="482" rx="22" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="190" cy="478" rx="16" ry="4" fill="#D2CCC3"/><ellipse cx="233" cy="482" rx="20" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="236" cy="478" rx="14" ry="4" fill="#D2CCC3"/><ellipse cx="272" cy="482" rx="15" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="275" cy="479" rx="9" ry="5" fill="#D2CCC3"/><ellipse cx="308" cy="483" rx="17" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="311" cy="480" rx="11" ry="6" fill="#D2CCC3"/><ellipse cx="347" cy="481" rx="18" ry="9" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="350" cy="478" rx="12" ry="4" fill="#D2CCC3"/><ellipse cx="384" cy="481" rx="15" ry="9" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="387" cy="478" rx="9" ry="4" fill="#D2CCC3"/><ellipse cx="422" cy="480" rx="19" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="425" cy="477" rx="13" ry="3" fill="#D2CCC3"/><ellipse cx="466" cy="483" rx="20" ry="11" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="468" cy="480" rx="14" ry="6" fill="#D2CCC3"/><ellipse cx="506" cy="480" rx="16" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="508" cy="478" rx="10" ry="4" fill="#D2CCC3"/><ellipse cx="542" cy="482" rx="18" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="546" cy="480" rx="12" ry="6" fill="#D2CCC3"/><ellipse cx="580" cy="480" rx="16" ry="8" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="582" cy="477" rx="10" ry="3" fill="#D2CCC3"/><ellipse cx="614" cy="482" rx="14" ry="10" fill="#B8B0A6" stroke="#8E857B" stroke-width="1.2"/><ellipse cx="616" cy="478" rx="8" ry="4" fill="#D2CCC3"/></g>
-            <path d="M0 488 C220 474 420 474 640 490 L640 560 L0 560 Z" fill="#F4EDE4"/>
-            <path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(214 494) rotate(20)"/><path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(262 506) rotate(-40)"/><path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(360 500) rotate(70)"/><path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(402 512) rotate(10)"/><path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(470 498) rotate(-20)"/><path d="M0 0 C-4 -3 -5 -8 -3 -11 Q-1 -12 0 -9.5 Q1 -12 3 -11 C5 -8 4 -3 0 0 Z" fill="#F7B6C8" transform="translate(160 508) rotate(50)"/>
-            <!-- stone lantern (石燈籠) -->
-            <g transform="translate(200 374)">
-              <path d="M-22 92 L22 92 L18 82 L-18 82 Z" fill="#A8A29A" stroke="#7F786F" stroke-width="1.2"/>
-              <path d="M-8 82 L-8 50 L8 50 L8 82 Z" fill="#B8B2AA" stroke="#7F786F" stroke-width="1.2"/>
-              <path d="M-18 50 L18 50 L16 42 L-16 42 Z" fill="#A8A29A" stroke="#7F786F" stroke-width="1.2"/>
-              <path d="M-14 42 L14 42 L14 18 L-14 18 Z" fill="#B8B2AA" stroke="#7F786F" stroke-width="1.2"/>
-              <path d="M-7 38 L7 38 L7 23 L-7 23 Z" fill="#FFE7A6"/>
-              <path d="M-30 18 Q0 4 30 18 L22 10 Q0 -4 -22 10 Z" fill="#A8A29A" stroke="#7F786F" stroke-width="1.2" stroke-linejoin="round"/>
-              <path d="M-4 -2 Q0 -12 4 -2 Z" fill="#A8A29A" stroke="#7F786F" stroke-width="1.2"/>
-              <path d="M4 50 L8 50 L8 82 L4 82 Z M10 18 L14 18 L14 42 L10 42 Z" fill="#D2CCC3"/>
-            </g>
-            <!-- purple wagasa (和傘) resting on the path -->
-            <g transform="translate(426 470) rotate(-14) scale(.88)">
-              <path d="M-4 0 L-34 -58" stroke="#5A3A2E" stroke-width="4" stroke-linecap="round"/>
-              <path d="M-74 -40 Q-2 -96 66 -52 Q30 -30 -4 -28 Q-40 -26 -74 -40 Z" fill="#9B5FB5" stroke="#5E2E78" stroke-width="1.6" stroke-linejoin="round"/>
-              <path d="M-74 -40 Q-40 -26 -4 -28 Q30 -30 66 -52 Q34 -40 -4 -38 Q-42 -36 -74 -40 Z" fill="#7C4497"/>
-              <path d="M-6 -74 L-74 -40 M-6 -74 L-40 -30 M-6 -74 L-4 -28 M-6 -74 L32 -32 M-6 -74 L66 -52" stroke="#C58FD8" stroke-width="1.4" opacity=".9"/>
-              <path d="M-6 -74 Q24 -78 50 -62 Q22 -66 -6 -70 Z" fill="#D9AEE6" opacity=".85"/>
-              <circle cx="-6" cy="-74" r="3.5" fill="#5E2E78"/>
-            </g>
-            <g transform="translate(176 360) rotate(30)"><path class="drift" style="--i:0" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(520 380) rotate(-20)"><path class="drift" style="--i:1" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(420 350) rotate(60)"><path class="drift" style="--i:2" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(250 380) rotate(-50)"><path class="drift" style="--i:3" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g>
-            </g>
-          </g>
-          <circle cx="320" cy="270" r="230" fill="none" stroke="#D9C6B6" stroke-width="9"/>
-          <circle cx="320" cy="270" r="223" fill="none" stroke="#FFFDF9" stroke-width="2" opacity=".8"/>
-          <!-- a branch breaking out of the window frame -->
-          <g class="about__branch">
-            <path d="M650 40 C590 54 540 70 500 92 C470 108 450 124 430 140 L436 146 C458 130 478 116 506 102 C546 82 594 66 654 54 Z" fill="#6E5452"/>
-            <path d="M560 64 C552 44 540 32 524 24 L528 18 C546 28 560 42 568 60 Z" fill="#6E5452"/>
-            <g class="bloom" style="--i:0"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(440 138) rotate(10) scale(0.55)"/></g><g class="bloom" style="--i:1"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(476 116) rotate(40) scale(0.65)"/></g><g class="bloom" style="--i:2"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(508 98) rotate(-20) scale(0.5)"/></g><g class="bloom" style="--i:3"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(540 80) rotate(15) scale(0.6)"/></g><g class="bloom" style="--i:4"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(574 70) rotate(50) scale(0.55)"/></g><g class="bloom" style="--i:5"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(612 58) rotate(-10) scale(0.6)"/></g><g class="bloom" style="--i:6"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(526 26) rotate(20) scale(0.5)"/></g><g class="bloom" style="--i:7"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(554 50) rotate(0) scale(0.45)"/></g><g class="bloom" style="--i:8"><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(494 126) rotate(70) scale(0.45)"/></g>
-          </g>
-        </svg>
-          </div>
         </figure>
         <div class="about__copy">
           <header class="section-head section-head--left" data-reveal>
