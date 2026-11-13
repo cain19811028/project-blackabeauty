@@ -13,11 +13,12 @@
   --sky-mid: #BDE3FA;
   --sky-haze: #FFF1EC;
 
-  /* sakura — 600 is for large type and icons only (3.6:1) */
-  --sakura-50: #FFF2F6;
-  --sakura-200: #FBCFDD;
-  --sakura-400: #F29BB5;
-  --sakura-600: #D45F86;
+  /* kapok (木棉, plan_20261113 decision 6). Named for the role, not the flower, so a new flower needs no rename.
+     600 is 4.6:1 on paper (AA even for body text); 400 and below are decoration only. */
+  --bloom-50: #FFF1EA;
+  --bloom-200: #F9CDB8;
+  --bloom-400: #EE8B62;
+  --bloom-600: #C0532C;
 
   /* accents — gold is decoration only (2.9:1), never text */
   --shu: #CC3B2B;
@@ -39,8 +40,8 @@
   --radius: 20px;
   --shadow-soft: 0 24px 60px -30px rgba(70, 40, 60, .38);
 
-  /* five notched petals, used as a list bullet */
-  --sakura-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-36 -36 72 72'%3E%3Cg id='p'%3E%3Cpath d='M0 0 C-11 -7 -14 -22 -8 -31 Q-3 -33.5 0 -27 Q3 -33.5 8 -31 C14 -22 11 -7 0 0Z'/%3E%3C/g%3E%3Cuse href='%23p' transform='rotate(72)'/%3E%3Cuse href='%23p' transform='rotate(144)'/%3E%3Cuse href='%23p' transform='rotate(216)'/%3E%3Cuse href='%23p' transform='rotate(288)'/%3E%3C/svg%3E");
+  /* five rounded kapok petals, used as a list bullet */
+  --bloom-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-36 -36 72 72'%3E%3Cg id='p'%3E%3Cpath d='M0 0 C-10 -6 -17 -18 -14 -28 C-11 -35 -3 -36 0 -35 C3 -36 11 -35 14 -28 C17 -18 10 -6 0 0Z'/%3E%3C/g%3E%3Cuse href='%23p' transform='rotate(72)'/%3E%3Cuse href='%23p' transform='rotate(144)'/%3E%3Cuse href='%23p' transform='rotate(216)'/%3E%3Cuse href='%23p' transform='rotate(288)'/%3E%3C/svg%3E");
 }
 
 /* Gown colourways: sampled from the shop's photos, corrected for the old flash cast (plan §5.3). */

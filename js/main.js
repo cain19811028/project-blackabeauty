@@ -2,12 +2,12 @@
   'use strict';
 
   const BAB = window.BAB;
-  BAB.Sakura.init(
+  BAB.Petals.init(
     document.querySelector('.petals--back'),
     document.querySelector('.petals--front'),
     document.querySelector('.hero'),
   );
   BAB.Motion.init();
   BAB.Schools.init();
-  window.setTimeout(BAB.Sakura.openingGust, 1000);
+  window.setTimeout(BAB.Petals.openingGust, 1000);
 })();

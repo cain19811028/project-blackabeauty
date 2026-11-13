@@ -22,6 +22,12 @@ const mapUrls = [...html.matchAll(/\b(?:src|href)="([^"]*google\.com\/maps[^"]*)
   return [readable, ...places].join(' ');
 });
 
+// Structured data for search engines. Since 2026-11-13 the 官網／奇摩拍賣／Blogger links live only here:
+// the client asked for them to be removed from the page (plan_20261113 §3, decision 8).
+const ldMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+const ld = ldMatch ? JSON.parse(ldMatch[1]) : {};
+const sameAs = Array.isArray(ld.sameAs) ? ld.sameAs : [];
+
 const SCHOOLS = ('清華大學、台北大學、輔仁大學、中正大學、中山大學、中原大學、成功大學、東吳大學、高雄大學、台灣海大、元智大學、文化學院、'
   + '政治大學、台灣師大、高雄師大、新竹師大、崑山大學、輔英大學、虎尾學院、康寧學院、台北師大、台北商院、高雄應大、高雄科大、'
   + '長榮大學、嘉南大學、南華大學、真理大學、屏東師大、屏東商院、屏東科大、北台學院、大仁大學、高醫大學、聖約翰大學、美和學院、'
@@ -40,11 +46,11 @@ const checks = [
   ['信箱', () => text.includes('yes_blackabeauty_yes@yahoo.com.tw')],
   ['tel: 連結（四支）', () => ['tel:073493832', 'tel:073597082', 'tel:073597036', 'tel:0933907593'].every((t) => hrefs.includes(t))],
   ['mailto: 連結', () => hrefs.includes('mailto:yes_blackabeauty_yes@yahoo.com.tw')],
-  ['官網連結', () => hrefs.includes('http://www.blackabeauty.com.tw')],
+  ['官網（結構化資料）', () => ld.url === 'http://www.blackabeauty.com.tw'],
   ['FB 連結', () => hrefs.some((h) => h.includes('facebook.com/pages/') && h.endsWith('/559226934194966'))],
-  ['奇摩拍賣連結', () => hrefs.includes('https://tw.bid.yahoo.com/tw/booth/Y3789989705')],
-  ['Blogger 連結', () => hrefs.includes('http://blackabeauty999.blogspot.tw/')],
-  ['地圖指向新址', () => mapUrls.length > 0 && mapUrls.every((u) => u.includes('鼎貴路62巷14號'))],
+  ['奇摩拍賣（結構化資料）', () => sameAs.includes('https://tw.bid.yahoo.com/tw/booth/Y3789989705')],
+  ['Blogger（結構化資料）', () => sameAs.includes('http://blackabeauty999.blogspot.tw/')],
+  ['導航連結指向新址', () => mapUrls.length > 0 && mapUrls.every((u) => u.includes('鼎貴路62巷14號'))],
   ['沒有任何舊址（鼎信街）', () => !text.includes('鼎信街') && !mapUrls.some((u) => u.includes('鼎信街'))],
   // 關於我們 (about.html; the Big5 emphasis marks are restored as 「」, plan §7.2)
   ['關於：機關團體', () => text.includes('歡迎機關、團體「訂購、出租」')],

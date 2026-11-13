@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Layering (plan §4.2): sky 0 → back petals 1 → content 2 → cloud floor, branch 3 → near petals 4 → paper grain 5 → chrome 10.
+   Layering (plan §4.2): sky 0 → back petals 1 → content 2 → torn-paper edge, branch 3 → near petals 4 → paper grain 5 → chrome 10.
    Nothing between <body> and these layers may create a stacking context.
    ========================================================================== */
 .petals {
@@ -73,7 +73,7 @@
   letter-spacing: .14em;
   text-decoration: none;
   padding: 6px 0;
-  background: linear-gradient(var(--sakura-400), var(--sakura-400)) no-repeat 0 100% / 0 2px;
+  background: linear-gradient(var(--bloom-400), var(--bloom-400)) no-repeat 0 100% / 0 2px;
   transition: background-size .3s var(--ease-out);
 }
 .site-nav a:hover { background-size: 100% 2px; }
@@ -105,7 +105,7 @@
   display: grid;
   align-items: center;
   /* the bottom room is the cloud floor the gowns stand on */
-  padding: calc(var(--header-h) + 24px) 0 clamp(80px, 9vw, 124px);
+  padding: calc(var(--header-h) + 24px) 0 clamp(36px, 4vw, 60px);
   overflow: hidden;
 }
 .hero__sky {
@@ -115,7 +115,7 @@
   background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 40%, var(--sky-haze) 74%, var(--paper) 100%);
 }
 /* Layers motion.js moves (plan_20261113 §4.1). Each gets its own compositor layer, so moving one never repaints its art. */
-.sunlight, .rays, .clouds, .campus, .bank, .rig, .rig__glow, .gown, .gown__sheen, .hero__copy, .hero__vertical, .hero__branch {
+.sunlight, .rays, .clouds, .campus, .lawn, .paper, .rig, .rig__glow, .gown, .gown__sheen, .hero__copy, .hero__vertical, .hero__branch {
   will-change: transform;
 }
 
@@ -153,32 +153,23 @@
 /* `translate` drifts on the compositor and composes with the `transform` motion.js writes. */
 .clouds--far { animation: sky-drift 80s var(--ease-in-out) infinite alternate; }
 .clouds--mid { transform-origin: 50% 30%; animation: sky-drift 56s var(--ease-in-out) -20s infinite alternate-reverse; }
-.campus { bottom: 0; height: 42%; }
+/* the campus stands on the far hills; its lower edge hides behind the lawn crest */
+.campus { bottom: 6%; height: 36%; transform-origin: 50% 100%; }
+.lawn { position: absolute; left: 0; bottom: 0; width: 100%; height: 15%; transform-origin: 50% 100%; }
 
-/* Cloud floor. Each row is a solid band reaching far below the hero with puffs along its top, so it can rise on
-   scroll without opening a gap; the front row is paper-coloured, which is what melts the hero into 關於我們. */
-.bank {
+/* Torn washi edge. A solid paper band reaching far below the hero with the deckle along its top, so it can rise
+   on scroll without opening a gap; at rest only the deckle strip shows along the bottom. */
+.hero__paper { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.paper {
   position: absolute;
   left: 0;
   right: 0;
+  top: calc(100% - 8px);
   bottom: -70vh;
-  background: var(--bank-lit);
+  background: var(--paper);
   transform-origin: 50% 0;
 }
-.bank svg {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% - 2px);
-  width: max(100%, 1100px);
-  height: auto;
-  translate: -50% 0;
-}
-/* the far row is squashed flat, the way a distant cloud sea looks at a grazing angle; the campus rises out of it */
-.bank--back { --bank-lit: #F1F6FB; top: calc(100% - clamp(64px, 7vw, 110px)); }
-.bank--back svg { width: 100%; height: clamp(64px, 8vw, 124px); }
-.hero__bank { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
-/* at rest only the tops of the near puffs show; scrolling raises the rest */
-.bank--front { --bank-lit: var(--paper); top: calc(100% + clamp(40px, 6vw, 100px)); }
+.paper svg { position: absolute; left: 0; bottom: calc(100% - 1px); width: 100%; height: clamp(16px, 2vw, 26px); }
 
 .hero__inner {
   display: grid;
@@ -194,7 +185,7 @@
   font-size: clamp(1.1rem, 6.6cqi, 2.4rem);
   white-space: nowrap;
   line-height: 1.2;
-  color: var(--sakura-600);
+  color: var(--bloom-600);
   transform: rotate(-4deg);
   transform-origin: left center;
 }
@@ -210,7 +201,7 @@
   text-shadow: 0 2px 28px rgba(255, 255, 255, .55);
 }
 .hero__title .hl {
-  background: linear-gradient(transparent 62%, var(--sakura-200) 62%, var(--sakura-200) 94%, transparent 94%) no-repeat 0 0 / 0 100%;
+  background: linear-gradient(transparent 62%, var(--bloom-200) 62%, var(--bloom-200) 94%, transparent 94%) no-repeat 0 0 / 0 100%;
   animation: hl-in 1s var(--ease-out) 1.3s forwards;
 }
 .hero__lead {
@@ -282,39 +273,36 @@
   position: relative;
   z-index: 2;
   align-self: end;
+  /* reach down into the bottom room so the tripods stand on the lawn, not up at the campus line; percentages
+     resolve against the column width, and the rig is 0.9 of that tall */
+  margin-bottom: -30%;
 }
-/* Same 1000×800 frame the gowns and caps were drawn in; the pivot sits on the floor line so tilts read as the stage turning. */
+/* 1000×900 frame: each gown is drawn 400×720 and its dress form adds a stand below the hem (400×800 units).
+   The pivot sits on the lawn line so tilts read as the stage turning. */
 .rig {
   position: relative;
-  aspect-ratio: 1000 / 800;
-  transform-origin: 50% 85%;
+  aspect-ratio: 1000 / 900;
+  transform-origin: 50% 92%;
 }
-.rig__glow, .rig__floor, .gown, .hero__caps { position: absolute; }
+.rig__glow, .gown, .hero__caps { position: absolute; }
 .rig__glow {
-  inset: 6% 6% 20%;
-  background: radial-gradient(closest-side, rgba(255, 255, 255, .72), rgba(255, 251, 243, .3) 55%, rgba(255, 251, 243, 0));
+  inset: 6% 6% 26%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, .6), rgba(255, 251, 243, .24) 55%, rgba(255, 251, 243, 0));
 }
-.rig__floor {
-  left: -8%;
-  right: -8%;
-  bottom: -8%;
-  height: 22%;
-  background: radial-gradient(closest-side, rgba(255, 247, 230, .95), rgba(255, 247, 230, .45) 55%, rgba(255, 247, 230, 0));
-}
-.gown--bachelor { left: 1%; top: 12.25%; width: 36%; height: 81%; }
-.gown--doctor { left: 63%; top: 12.25%; width: 36%; height: 81%; }
-.gown--master { left: 30%; top: 7%; width: 40%; height: 90%; }
+.gown--bachelor { left: 1%; top: 14.22%; width: 36%; height: 80%; }
+.gown--doctor { left: 63%; top: 14.22%; width: 36%; height: 80%; }
+.gown--master { left: 30%; top: 6.67%; width: 40%; height: 88.89%; }
 .gown__art, .gown__sheen { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-/* A tight contact core under the hem plus a wide soft falloff. */
+/* Shadow on the grass: a tight core at the tripod, and the gown's soft shadow thrown to the lower left, away from the sun. */
 .gown__shadow {
   position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 93.5%;
-  height: 9%;
+  left: -20%;
+  right: 8%;
+  top: 95%;
+  height: 7%;
   background:
-    radial-gradient(closest-side, rgba(46, 32, 48, .42), rgba(46, 32, 48, 0) 70%) center / 70% 46% no-repeat,
-    radial-gradient(closest-side, rgba(58, 42, 58, .22), rgba(58, 42, 58, 0));
+    radial-gradient(closest-side, rgba(34, 58, 28, .4), rgba(34, 58, 28, 0) 70%) 64% 50% / 38% 60% no-repeat,
+    radial-gradient(closest-side, rgba(34, 58, 28, .22), rgba(34, 58, 28, 0));
 }
 /* Colour-dodge with a warm grey roughly doubles what is already lit: folds and trims flare, the black stays black. */
 .gown__sheen { pointer-events: none; mix-blend-mode: color-dodge; }
@@ -338,7 +326,7 @@
   z-index: 3;
   width: clamp(280px, 44vw, 660px);
   /* `translate` composes with the parallax `transform` that motion.js writes */
-  translate: 9% -10%;
+  translate: 6% -3%;
   transform-origin: 100% 0;
   pointer-events: none;
 }
@@ -379,7 +367,7 @@
   width: 9px;
   height: 9px;
   border-radius: 80% 0 80% 0;
-  background: var(--sakura-400);
+  background: var(--bloom-400);
   animation: cue-fall 2.4s var(--ease-in-out) infinite;
 }
 
@@ -480,9 +468,9 @@
   width: .9em;
   height: .9em;
   transform: translateY(.12em);
-  background: var(--sakura-400);
-  -webkit-mask: var(--sakura-mask) center / contain no-repeat;
-  mask: var(--sakura-mask) center / contain no-repeat;
+  background: var(--bloom-400);
+  -webkit-mask: var(--bloom-mask) center / contain no-repeat;
+  mask: var(--bloom-mask) center / contain no-repeat;
 }
 .bloom, .drift, .twinkle, .costume, .spot__gown, .rack__item, .rack__tag, .blade {
   transform-box: fill-box;
@@ -559,7 +547,7 @@
   font-weight: 600;
   font-size: clamp(5rem, 3rem + 8vw, 9.5rem);
   line-height: 1.05;
-  color: var(--sakura-600);
+  color: var(--bloom-600);
   font-variant-numeric: lining-nums tabular-nums;
 }
 .schools__unit {
@@ -585,7 +573,7 @@
   color: var(--ink);
 }
 .schools__search input::placeholder { color: var(--ink-mute); }
-.schools__search input:focus { outline: 3px solid rgba(242, 155, 181, .4); outline-offset: 1px; border-color: var(--sakura-400); }
+.schools__search input:focus { outline: 3px solid rgba(238, 139, 98, .4); outline-offset: 1px; border-color: var(--bloom-400); }
 .schools__status { min-height: 1.6em; margin-top: 10px; text-align: center; font-size: .9rem; color: var(--ink-mute); }
 .schools__wall {
   display: flex;
@@ -613,8 +601,8 @@
 }
 .js .schools__wall.is-in li.is-dim { opacity: .25; }
 .schools__wall li.is-hit {
-  background: var(--sakura-200);
-  box-shadow: 0 0 0 1.5px var(--sakura-400);
+  background: var(--bloom-200);
+  box-shadow: 0 0 0 1.5px var(--bloom-400);
   transform: translateY(-2px);
 }
 .schools__more { margin-top: 28px; text-align: center; font-family: var(--font-serif); font-weight: 600; color: var(--ink-soft); letter-spacing: .12em; }
@@ -667,8 +655,8 @@
   display: inline-block;
   padding: 0 .6em;
   border-radius: 999px;
-  background: var(--sakura-50);
-  box-shadow: inset 0 0 0 1px var(--sakura-200);
+  background: var(--bloom-50);
+  box-shadow: inset 0 0 0 1px var(--bloom-200);
   color: var(--ink);
   font-weight: 500;
   line-height: 1.85;
@@ -678,11 +666,11 @@
 
 /* ---------- contact ---------- */
 .contact { position: relative; padding: clamp(64px, 9vw, 120px) 0 clamp(88px, 11vw, 140px); }
+/* Since 2026-11-13 only the details remain (client's call), so the card is a single centred column, like a name card. */
 .contact__card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  gap: clamp(24px, 4vw, 56px);
-  padding: clamp(20px, 4vw, 48px);
+  max-width: 620px;
+  margin-inline: auto;
+  padding: clamp(24px, 4vw, 44px) clamp(20px, 4vw, 48px) clamp(12px, 2vw, 24px);
   border-radius: calc(var(--radius) + 8px);
   background: var(--paper);
   box-shadow: var(--shadow-soft), 0 0 0 1px var(--line);
@@ -703,7 +691,7 @@
   color: var(--ink-soft);
   letter-spacing: .06em;
 }
-.contact__list { display: grid; gap: 14px; margin: 24px 0; }
+.contact__list { display: grid; gap: 14px; margin: 24px 0 0; }
 .contact__list > div {
   display: grid;
   grid-template-columns: 4.6em minmax(0, 1fr);
@@ -712,6 +700,7 @@
   padding-bottom: 14px;
   border-bottom: 1px dashed var(--line);
 }
+.contact__list > div:last-child { border-bottom: 0; }
 .contact__list dt {
   display: flex;
   align-items: center;
@@ -727,35 +716,7 @@
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
-.contact__list dd a { text-decoration-color: var(--sakura-400); }
-.contact__links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-bottom: 24px;
-}
-.contact__links a {
-  display: grid;
-  gap: 2px;
-  height: 100%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: var(--paper-warm);
-  text-decoration: none;
-  transition: background-color .25s, transform .25s var(--ease-out);
-}
-.contact__links a:hover { background: var(--sakura-50); transform: translateY(-2px); }
-.contact__links b { display: flex; align-items: center; gap: .45em; font-weight: 700; letter-spacing: .08em; }
-.contact__links span { font-size: .78rem; color: var(--ink-mute); overflow-wrap: anywhere; }
-.contact__actions { display: flex; flex-wrap: wrap; gap: 12px; }
-.contact__map {
-  min-height: 360px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--paper-warm);
-  box-shadow: 0 0 0 1px var(--line);
-}
-.contact__map iframe { width: 100%; height: 100%; min-height: 360px; border: 0; }
+.contact__list dd a { text-decoration-color: var(--bloom-400); }
 
 /* ---------- footer ---------- */
 .site-footer {
@@ -809,6 +770,9 @@
 .js [data-reveal].is-in { opacity: 1; transform: none; }
 /* the seal list animates its children instead of itself */
 .js .seals[data-reveal] { opacity: 1; transform: none; }
+/* The 關於我們 art never hides: at opacity 0 the browser skips drawing it ahead, and its grain-filtered first draw then
+   stalls a frame (~67 ms measured) the moment it fades in. Its entrance is the kapok blooming on the branch instead. */
+.js .about__art[data-reveal] { opacity: 1; transform: none; }
 
 /* ---------- keyframes ---------- */
 @keyframes ch-in {
@@ -898,11 +862,11 @@
   .hero__vertical { display: none; }
 }
 @media (max-width: 959px) {
-  .hero { min-height: auto; padding-bottom: 96px; }
+  .hero { min-height: auto; padding-bottom: 40px; }
+  .hero__stage { margin-bottom: 0; }
   .hero__inner { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .hero__stage { width: min(100%, 640px); margin-inline: auto; }
   .hero__branch { width: clamp(220px, 62vw, 460px); translate: 14% -16%; }
-  .contact__card { grid-template-columns: minmax(0, 1fr); }
   .about__inner { grid-template-columns: minmax(0, 1fr); }
   .about__art { width: min(100%, 520px); margin-inline: auto; }
   .products__layout { grid-template-columns: minmax(0, 1fr); }
@@ -946,7 +910,7 @@
   }
   .site-header.is-open .site-nav { opacity: 1; visibility: visible; transform: none; }
   .site-nav a { padding: 14px 16px; border-radius: 12px; background: none; font-size: 1.05rem; }
-  .site-nav a:active { background-color: var(--sakura-50); }
+  .site-nav a:active { background-color: var(--bloom-50); }
   .header-call span { display: none; }
   .header-call { padding: .45em .8em; }
   .brand__text em { display: none; }
@@ -958,7 +922,6 @@
 }
 @media (max-width: 420px) {
   .brand__text strong { font-size: .9rem; letter-spacing: .06em; }
-  .contact__links { grid-template-columns: minmax(0, 1fr); }
   .contact__list > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
 }
 

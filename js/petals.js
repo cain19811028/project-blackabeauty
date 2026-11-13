@@ -1,4 +1,5 @@
-/* Sakura petals (plan §4.2). Two fixed canvases: far/mid petals behind the content, a few near petals in front.
+/* Falling kapok (木棉) petals, and now and then a whole flower (plan_20261113 decision 6).
+   Two fixed canvases: far/mid petals behind the content, a few near ones in front.
    Petals are pre-rendered sprites; each frame only transforms and blits them. */
 (function () {
   'use strict';
@@ -8,54 +9,98 @@
   const SPRITE = 64;
   const NEAR = 0.82; // depth above which a petal is drawn on the front canvas
   const PUSH_RADIUS = 110;
+  const FLOWER_ODDS = 0.08; // kapok drops whole flowers as well as petals
 
   const TINTS = [
-    { base: '#F28DAC', mid: '#F9C3D3', tip: '#FFF3F7', baseBack: '#E7799B', midBack: '#F2AFC3' },
-    { base: '#F5A5BD', mid: '#FCD6E1', tip: '#FFFFFF', baseBack: '#EC93AE', midBack: '#F6C2D2' },
+    { base: '#B93220', mid: '#E2492C', tip: '#FF8A57', baseBack: '#A42A1A', midBack: '#C93D25' },
+    { base: '#C83A22', mid: '#EE5C34', tip: '#FFA06E', baseBack: '#AE3020', midBack: '#D24A2C' },
   ];
-  const WIDTHS = [0.82, 1, 1.16];
+  const WIDTHS = [0.86, 1, 1.14];
+  const PETAL_KINDS = WIDTHS.length * TINTS.length;
 
-  // A real sakura petal is cleft at its tip; that notch is what separates "sakura" from "pink ellipse".
+  // A kapok petal is thick and rounded, widest near the tip, with no notch: the opposite of a sakura petal.
   function petalPath(ctx, w) {
     ctx.beginPath();
     ctx.moveTo(0, 26);
-    ctx.bezierCurveTo(-20 * w, 12, -21 * w, -16, -9 * w, -26);
-    ctx.quadraticCurveTo(-4 * w, -28, 0, -19);
-    ctx.quadraticCurveTo(4 * w, -28, 9 * w, -26);
-    ctx.bezierCurveTo(21 * w, -16, 20 * w, 12, 0, 26);
+    ctx.bezierCurveTo(-12 * w, 20, -20 * w, -2, -17 * w, -16);
+    ctx.bezierCurveTo(-15 * w, -26, -6 * w, -28, 0, -27);
+    ctx.bezierCurveTo(6 * w, -28, 15 * w, -26, 17 * w, -16);
+    ctx.bezierCurveTo(20 * w, -2, 12 * w, 20, 0, 26);
     ctx.closePath();
   }
 
-  function makeSprite(width, tint, back, blur) {
+  function petalFill(ctx, tint, back) {
+    const g = ctx.createLinearGradient(0, 26, 0, -26);
+    g.addColorStop(0, back ? tint.baseBack : tint.base);
+    g.addColorStop(0.5, back ? tint.midBack : tint.mid);
+    g.addColorStop(1, tint.tip);
+    return g;
+  }
+
+  function makePetal(width, tint, back, blur) {
     const c = document.createElement('canvas');
     c.width = c.height = SPRITE;
     const ctx = c.getContext('2d');
     ctx.translate(SPRITE / 2, SPRITE / 2);
     if (blur) ctx.filter = `blur(${blur}px)`;
-    const g = ctx.createLinearGradient(0, 26, 0, -26);
-    g.addColorStop(0, back ? tint.baseBack : tint.base);
-    g.addColorStop(0.55, back ? tint.midBack : tint.mid);
-    g.addColorStop(1, tint.tip);
     petalPath(ctx, width);
-    ctx.fillStyle = g;
+    ctx.fillStyle = petalFill(ctx, tint, back);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(214, 95, 134, .2)';
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255, 176, 130, .5)';
+    ctx.lineWidth = 1.2;
     ctx.beginPath();
-    ctx.moveTo(0, 22);
-    ctx.quadraticCurveTo(1.5, 2, 0, -14);
+    ctx.moveTo(0, 20);
+    ctx.quadraticCurveTo(1.5, 0, 0, -20);
     ctx.stroke();
     return c;
   }
 
+  // A fallen flower seen from above: five petals around a crown of stamens.
+  function makeFlower(tint, back, blur) {
+    const c = document.createElement('canvas');
+    c.width = c.height = SPRITE;
+    const ctx = c.getContext('2d');
+    ctx.translate(SPRITE / 2, SPRITE / 2);
+    if (blur) ctx.filter = `blur(${blur}px)`;
+    for (let i = 0; i < 5; i++) {
+      ctx.save();
+      ctx.rotate((i * 72 - 6) * Math.PI / 180);
+      ctx.translate(0, -13);
+      ctx.scale(0.52, 0.52);
+      petalPath(ctx, 1);
+      ctx.fillStyle = petalFill(ctx, tint, back);
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.fillStyle = '#6E1A0E';
+    ctx.beginPath();
+    ctx.arc(0, 0, 4.5, 0, TAU);
+    ctx.fill();
+    ctx.fillStyle = '#F3C04F';
+    for (let i = 0; i < 10; i++) {
+      const a = (i * 36) * Math.PI / 180;
+      ctx.beginPath();
+      ctx.arc(Math.sin(a) * 6.5, -Math.cos(a) * 6.5, 1.3, 0, TAU);
+      ctx.fill();
+    }
+    return c;
+  }
+
+  // kinds 0…PETAL_KINDS-1 are petals; the rest are whole flowers
   function buildSprites() {
     const set = { far: { front: [], back: [] }, near: { front: [], back: [] } };
     WIDTHS.forEach((w) => TINTS.forEach((tint) => {
-      set.far.front.push(makeSprite(w, tint, false, 0));
-      set.far.back.push(makeSprite(w, tint, true, 0));
-      set.near.front.push(makeSprite(w, tint, false, 1.6));
-      set.near.back.push(makeSprite(w, tint, true, 1.6));
+      set.far.front.push(makePetal(w, tint, false, 0));
+      set.far.back.push(makePetal(w, tint, true, 0));
+      set.near.front.push(makePetal(w, tint, false, 1.6));
+      set.near.back.push(makePetal(w, tint, true, 1.6));
     }));
+    TINTS.forEach((tint) => {
+      set.far.front.push(makeFlower(tint, false, 0));
+      set.far.back.push(makeFlower(tint, true, 0));
+      set.near.front.push(makeFlower(tint, false, 1.6));
+      set.near.back.push(makeFlower(tint, true, 1.6));
+    });
     return set;
   }
 
@@ -69,7 +114,8 @@
 
   function place(p, where) {
     p.z = Math.random() ** 1.5;
-    p.size = 8 + p.z * p.z * 22;
+    p.flower = Math.random() < FLOWER_ODDS;
+    p.size = (10 + p.z * p.z * 24) * (p.flower ? 1.5 : 1);
     if (where === 'left') {
       p.x = -30 - Math.random() * 220;
       p.y = Math.random() * H * 0.75;
@@ -83,12 +129,13 @@
     p.rot = Math.random() * TAU;
     p.vr = (Math.random() - 0.5) * 2.4;
     p.flip = Math.random() * TAU;
-    p.vf = 1.4 + Math.random() * 2.6;
+    // thick petals flutter less than sakura; whole flowers barely flip, they tumble
+    p.vf = p.flower ? 0.3 + Math.random() * 0.6 : 1 + Math.random() * 1.6;
     p.phase = Math.random() * TAU;
     p.swayF = 0.6 + Math.random() * 0.9;
     p.ex = 0;
     p.ey = 0;
-    p.kind = (Math.random() * WIDTHS.length * TINTS.length) | 0;
+    p.kind = p.flower ? PETAL_KINDS + ((Math.random() * TINTS.length) | 0) : (Math.random() * PETAL_KINDS) | 0;
     return p;
   }
 
@@ -111,7 +158,8 @@
       ctx.canvas.width = Math.round(W * dpr);
       ctx.canvas.height = Math.round(H * dpr);
     });
-    baseCount = Math.max(30, Math.min(105, Math.round((W * H) / 13000)));
+    // kapok petals are big and heavy, so fewer of them read as a fall rather than a blizzard
+    baseCount = Math.max(20, Math.min(70, Math.round((W * H) / 19000)));
     if (BAB.reducedMotion) drawStill();
   }
 
@@ -148,8 +196,10 @@
       const p = petals[i];
       const w = wind.at(p.y);
       const depth = 0.45 + p.z * 0.9;
-      p.x += (w * 70 * depth + Math.sin(t * p.swayF + p.phase) * (10 + p.z * 16) + p.ex) * dt;
-      p.y += ((24 + p.z * 44) * (1 - wind.gust * 0.3) + Math.cos(t * p.swayF * 1.3 + p.phase) * 6 + p.ey) * dt;
+      const sway = p.flower ? 3 + p.z * 5 : 7 + p.z * 12;
+      const fall = p.flower ? 48 + p.z * 70 : 32 + p.z * 52;
+      p.x += (w * 70 * depth * (p.flower ? 0.5 : 1) + Math.sin(t * p.swayF + p.phase) * sway + p.ex) * dt;
+      p.y += (fall * (1 - wind.gust * 0.3) + Math.cos(t * p.swayF * 1.3 + p.phase) * 6 + p.ey) * dt;
       p.rot += (p.vr + w * 0.4) * dt;
       p.flip += p.vf * (1 + wind.gust) * dt;
       const decay = Math.exp(-dt * 1.8);
@@ -191,7 +241,7 @@
     for (let i = 0; i < n; i++) {
       const p = place({}, 'scatter');
       p.z = 0.45 + Math.random() * 0.55;
-      p.size = 8 + p.z * p.z * 22;
+      p.size = (10 + p.z * p.z * 24) * (p.flower ? 1.5 : 1);
       p.x = x;
       p.y = y;
       const a = Math.random() * TAU;
@@ -227,7 +277,7 @@
       pointer.active = e.pointerType === 'mouse';
     }, { passive: true });
     document.documentElement.addEventListener('pointerleave', () => { pointer.active = false; });
-    BAB.wind.onGust((strength) => sweep(Math.round(baseCount * 0.22 * strength)));
+    BAB.wind.onGust((strength) => sweep(Math.round(baseCount * 0.15 * strength)));
     BAB.ticker.add(step);
   }
 
@@ -238,5 +288,5 @@
     BAB.wind.trigger(1.25);
   }
 
-  BAB.Sakura = { init, burst, openingGust };
+  BAB.Petals = { init, burst, openingGust };
 })();

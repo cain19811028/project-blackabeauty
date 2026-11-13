@@ -130,8 +130,8 @@
   const f2 = (v) => v.toFixed(2);
 
   // Hero depth (plan_20261113 §4.1). The pointer moves near layers with the cursor and far ones against it, and
-  // tilts the gown stage; scrolling pushes the camera forward: the branch sweeps past, the clouds open up and the
-  // cloud floor rises to carry the eye into 關於我們. Only transform and opacity change, so the compositor does the work.
+  // tilts the gown stage; scrolling pushes the camera forward across the lawn: the branch sweeps past, the ground
+  // rushes in and a torn sheet of paper rises over the scene into 關於我們. Only transform and opacity change.
   function initDepth(hero) {
     if (BAB.reducedMotion) return;
     const $ = (sel) => hero.querySelector(sel);
@@ -159,14 +159,15 @@
       ['.sunlight', (x, y, p) => `translate3d(${f2(x * -4)}px, ${f2(y * -3 + p * H * 0.35)}px, 0) scale(${f2(1 + p * 0.1)})`],
       ['.rays', (x, y, p) => `rotate(${f2(p * 12 + x * 2)}deg)`],
       ['.clouds--far', (x, y, p) => `translate3d(${f2(x * -6)}px, ${f2(y * -3 + p * H * 0.4)}px, 0)`],
-      ['.campus', (x, y, p) => `translate3d(${f2(x * -10)}px, ${f2(y * -3 + p * H * 0.28)}px, 0) scale(${f2(1 + p * 0.05)})`],
+      ['.campus', (x, y, p) => `translate3d(${f2(x * -10)}px, ${f2(y * -3 + p * H * 0.22)}px, 0) scale(${f2(1 + p * 0.05)})`],
+      // the lawn rushes toward the camera: it grows from its bottom edge as the scene is left behind
+      ['.lawn', (x, y, p) => `translate3d(${f2(x * -4)}px, ${f2(p * H * 0.04)}px, 0) scale(${f2(1 + p * 0.25)})`],
       ['.clouds--mid', (x, y, p) => `translate3d(${f2(x * -18)}px, ${f2(y * -8 + p * H * 0.12)}px, 0) scale(${f2(1 + p * 0.35)})`],
-      ['.bank--back', (x, y, p) => `translate3d(${f2(x * -12)}px, ${f2(y * -4 - p * H * 0.1)}px, 0) scale(${f2(1 + p * 0.1)})`],
       ['.hero__vertical', (x, y, p) => `translate3d(${f2(x * -8)}px, ${f2(p * H * 0.3)}px, 0)`],
       ['.rig__glow', (x, y) => `translate3d(${f2(x * -10)}px, ${f2(y * -6)}px, 0)`],
       ['.hero__copy', (x, y, p) => `translate3d(0, ${f2(p * H * 0.18 * drift)}px, 0)`, true],
       ['.rig', (x, y, p) => `perspective(1400px) translate3d(0, ${f2(-p * H * 0.08 * drift)}px, 0) rotateX(${f2(-y * 4 + p * 8)}deg) rotateY(${f2(x * 6)}deg) scale(${f2(1 + p * 0.06)})`, true],
-      ['.bank--front', (x, y, p) => `translate3d(${f2(x * 28)}px, ${f2(y * 8 - p * H * 0.4)}px, 0) scale(${f2(1 + p * 0.3)})`, true],
+      ['.paper', (x, y, p) => `translate3d(0, ${f2(-p * H * 0.2)}px, 0)`, true],
       ['.hero__branch', (x, y, p) => `translate3d(${f2(x * 40 + p * window.innerWidth * 0.28)}px, ${f2(y * 22 - p * H * 0.3)}px, 0) scale(${f2(1 + p * 0.45)}) rotate(${f2(p * -4)}deg)`, true],
     ];
     const lite = window.matchMedia('(max-width: 767px), (hover: none)').matches;
@@ -304,7 +305,7 @@
     initDepth(hero);
     hero.addEventListener('pointerdown', (e) => {
       if (e.target.closest('a, button')) return;
-      BAB.Sakura.burst(e.clientX, e.clientY, 16);
+      BAB.Petals.burst(e.clientX, e.clientY, 16);
     });
   }
 

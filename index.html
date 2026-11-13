@@ -55,7 +55,7 @@
   }
   </script>
   <script src="js/core.js" defer></script>
-  <script src="js/sakura.js" defer></script>
+  <script src="js/petals.js" defer></script>
   <script src="js/motion.js" defer></script>
   <script src="js/schools.js" defer></script>
   <script src="js/main.js" defer></script>
@@ -167,7 +167,7 @@
         <path d="M200 290 L200 336" stroke="var(--trim-line)" stroke-width="1.4"/>
       </g>
 
-      <!-- Golden plum-blossom brooch (梅花扣): five ROUND petals. Sakura petals elsewhere carry a notch; never mix them up. -->
+      <!-- Golden plum-blossom brooch (梅花扣): five small ROUND petals in gold. The kapok flowers elsewhere are orange-red with a stamen crown; keep the two distinct. -->
       <g id="k-plum" transform="translate(200 320) scale(1.3) translate(-200 -320)">
         <circle cx="200" cy="327" r="21" fill="#000" opacity=".18"/>
         <g fill="#E2B13C" stroke="#6E4B08" stroke-width="1.3">
@@ -235,6 +235,26 @@
         <use href="#k-neck"/><use href="#k-sleeves-dr"/><use href="#k-body"/><use href="#k-yoke"/><use href="#k-facings"/>
       </symbol>
 
+      <!-- Dress form (人台) the gowns are shown on (plan_20261113 decision 7), in the gowns' 400-wide frame: a linen neck
+           rising out of the collar under a turned-wood cap (the mortarboard sits on it), a walnut pole and tripod below the hem. -->
+      <g id="k-form-neck">
+        <path d="M178 238 L178 160 C186 156 214 156 222 160 L222 238 Z" fill="#E8DCC7" stroke="#B9A88C" stroke-width="1.5"/>
+        <path d="M178 238 L178 160 C182 158 186 157 190 157 L190 238 Z" fill="#D6C6AC"/>
+        <path d="M212 158 C216 158 219 159 222 160 L222 238 L214 238 Z" fill="#F6EFE3"/>
+        <ellipse cx="200" cy="158" rx="25" ry="5.5" fill="#8A5C3C" stroke="#5E3D27" stroke-width="1.2"/>
+        <path d="M194 158 L194 146 L206 146 L206 158 Z" fill="#7A5236"/>
+        <circle cx="200" cy="141" r="7.5" fill="#9A6B47" stroke="#5E3D27" stroke-width="1.2"/>
+        <circle cx="202.5" cy="138.5" r="2.4" fill="#D9AE85" opacity=".8"/>
+      </g>
+      <g id="k-form-stand">
+        <path d="M194 672 L206 672 L205 766 L195 766 Z" fill="#7A5236" stroke="#4E3322" stroke-width="1.2"/>
+        <path d="M201 672 L206 672 L205 766 L201 766 Z" fill="#A07850"/>
+        <path d="M196 768 C182 776 166 786 150 794 L146 790 C162 782 178 772 194 764 Z M204 768 C218 776 234 786 250 794 L254 790 C238 782 222 772 206 764 Z" fill="#7A5236" stroke="#4E3322" stroke-width="1.2" stroke-linejoin="round"/>
+        <path d="M197 769 L196 797 L204 797 L203 769 Z" fill="#6A4630" stroke="#4E3322" stroke-width="1.2"/>
+        <ellipse cx="200" cy="767" rx="10" ry="4" fill="#5E3D27"/>
+        <g fill="#3F2A1C"><ellipse cx="148" cy="794" rx="6" ry="3"/><ellipse cx="252" cy="794" rx="6" ry="3"/><ellipse cx="200" cy="798" rx="6" ry="3"/></g>
+      </g>
+
       <!-- Seal ink: roughens edges like a real stamp impression. -->
       <filter id="k-ink" x="-6%" y="-6%" width="112%" height="112%">
         <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="2" seed="5" result="t"/>
@@ -252,23 +272,26 @@
         <stop offset="1" stop-color="#A39581" stop-opacity="0"/>
       </linearGradient>
 
-      <!-- Sakura blossom: five petals, each cleft at the tip. -->
-      <radialGradient id="k-petal-grad" cx="0" cy="0" r="34" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stop-color="#EE7FA2"/><stop offset=".38" stop-color="#F9BFD0"/><stop offset="1" stop-color="#FFF2F6"/>
+      <!-- Kapok (木棉) flower, front view: five thick rounded petals, deep at the heart and bright at the tips,
+           around a crown of stamens. Petal angles are uneven on purpose so the flowers do not look stamped. -->
+      <radialGradient id="k-petal-grad" cx="0" cy="0" r="35" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#9E2414"/><stop offset=".3" stop-color="#D63A22"/><stop offset=".72" stop-color="#EE5C34"/><stop offset="1" stop-color="#FF8A57"/>
       </radialGradient>
-      <path id="k-petal" d="M0 0 C-11 -7 -14 -22 -8 -31 Q-3 -33.5 0 -27 Q3 -33.5 8 -31 C14 -22 11 -7 0 0 Z"/>
+      <!-- One path per layer (petals, veins, stamens, pollen) keeps each flower to six elements: the bloom-in animation
+           and the fallen flowers on the lawn repaint many copies, so element count is what matters here. -->
       <symbol id="k-blossom" viewBox="-36 -36 72 72" overflow="visible">
-        <g fill="url(#k-petal-grad)" stroke="#F3A6BD" stroke-width=".8">
-          <use href="#k-petal"/><use href="#k-petal" transform="rotate(72)"/><use href="#k-petal" transform="rotate(144)"/>
-          <use href="#k-petal" transform="rotate(216)"/><use href="#k-petal" transform="rotate(288)"/>
-        </g>
-        <circle r="5.5" fill="#E9729A"/>
-        <g stroke="#DB5A84" stroke-width="1.1" stroke-linecap="round"><path d="M3 0 L10 0"/><path d="M2.4 1.8 L8.1 5.9"/><path d="M0.9 2.9 L3.1 9.5"/><path d="M-0.9 2.9 L-3.1 9.5"/><path d="M-2.4 1.8 L-8.1 5.9"/><path d="M-3 0 L-10 0"/><path d="M-2.4 -1.8 L-8.1 -5.9"/><path d="M-0.9 -2.9 L-3.1 -9.5"/><path d="M0.9 -2.9 L3.1 -9.5"/><path d="M2.4 -1.8 L8.1 -5.9"/></g>
-        <g fill="#F7D774"><circle cx="11" cy="0" r="1.5"/><circle cx="8.9" cy="6.5" r="1.5"/><circle cx="3.4" cy="10.5" r="1.5"/><circle cx="-3.4" cy="10.5" r="1.5"/><circle cx="-8.9" cy="6.5" r="1.5"/><circle cx="-11" cy="0" r="1.5"/><circle cx="-8.9" cy="-6.5" r="1.5"/><circle cx="-3.4" cy="-10.5" r="1.5"/><circle cx="3.4" cy="-10.5" r="1.5"/><circle cx="8.9" cy="-6.5" r="1.5"/></g>
+        <path d="M-0.3 -3.0 C-9.8 -7.0 -17.9 -17.2 -17.8 -26.3 C-16.5 -33.0 -8.7 -35.3 -3.6 -33.8 C1.2 -36.3 9.3 -35.7 12.0 -29.4 C13.9 -20.6 8.1 -8.9 -0.3 -3.0 Z M2.8 -1.1 C4.0 -11.3 11.6 -22.0 20.3 -24.4 C27.1 -25.0 31.5 -18.1 31.5 -12.7 C35.3 -8.8 36.9 -0.9 31.6 3.4 C23.6 7.7 10.8 5.3 2.8 -1.1 Z M1.9 2.3 C12.0 0.3 24.5 4.3 29.5 11.8 C32.1 18.1 27.0 24.4 21.9 26.0 C19.3 30.8 12.2 34.8 6.5 31.1 C-0.0 24.8 -1.8 11.9 1.9 2.3 Z M-1.7 2.5 C3.0 11.7 2.6 24.7 -3.2 31.6 C-8.5 35.9 -16.0 32.6 -19.0 28.2 C-24.3 27.0 -30.1 21.3 -28.1 14.8 C-23.9 6.8 -11.9 1.6 -1.7 2.5 Z M-2.9 -0.8 C-10.2 6.4 -22.7 10.1 -31.0 6.7 C-36.7 3.0 -36.0 -5.1 -32.7 -9.4 C-33.2 -14.7 -29.6 -22.0 -22.8 -22.1 C-13.9 -20.6 -5.2 -10.9 -2.9 -0.8 Z" fill="url(#k-petal-grad)" stroke="#B02E1A" stroke-width=".9" stroke-linejoin="round"/>
+        <path d="M-0.9 -9.0 C-2.7 -15.8 -3.4 -22.8 -3.1 -29.8 M3.7 -12.5 C6.1 -18.7 6.4 -24.8 5.9 -29.8 M8.3 -3.4 C14.5 -6.9 21.0 -9.5 27.8 -11.2 M13.0 0.1 C19.7 0.7 25.6 -0.6 30.3 -2.5 M5.8 6.9 C11.1 11.6 15.6 17.0 19.3 23.0 M3.9 12.4 C5.4 18.9 8.5 24.2 11.7 28.0 M-5.0 7.5 C-8.1 13.8 -12.0 19.6 -16.8 24.9 M-10.9 7.2 C-16.7 10.4 -20.9 14.9 -23.7 19.0 M-8.7 -2.5 C-15.7 -3.4 -22.4 -5.4 -28.8 -8.3 M-10.2 -8.1 C-15.1 -12.7 -20.6 -15.3 -25.4 -16.6" fill="none" stroke="#FFA27A" stroke-width="1.2" stroke-linecap="round" opacity=".55"/>
+        <circle r="7.5" fill="#6E1A0E"/>
+        <path d="M-0.3 -4.0L-0.7 -10.5M1.2 -3.8L3.7 -12.0M2.5 -3.2L6.5 -8.3M3.4 -2.1L10.7 -6.4M3.7 -1.5L9.7 -3.9M4.0 -0.1L12.5 -0.2M3.8 1.4L9.9 3.6M3.0 2.6L9.4 8.2M2.6 3.1L6.7 8.0M1.3 3.8L4.1 11.8M-0.1 4.0L-0.4 10.5M-1.6 3.7L-4.9 11.5M-2.1 3.4L-5.6 8.9M-3.2 2.4L-10.0 7.5M-3.8 1.1L-10.1 2.9M-4.0 -0.3L-12.5 -1.1M-3.9 -1.0L-10.2 -2.5M-3.3 -2.3L-10.2 -7.2M-2.2 -3.3L-5.9 -8.7M-0.9 -3.9L-2.8 -12.2" fill="none" stroke="#F3C04F" stroke-width="1.1" stroke-linecap="round"/>
+        <path d="M-2.2 -10.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M2.2 -12.0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M5.0 -8.3a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M9.2 -6.4a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M8.2 -3.9a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M11.0 -0.2a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M8.4 3.6a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M7.9 8.2a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M5.2 8.0a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M2.6 11.8a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-1.9 10.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-6.4 11.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-7.1 8.9a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-11.5 7.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-11.6 2.9a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-14.0 -1.1a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-11.7 -2.5a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-11.7 -7.2a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-7.4 -8.7a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0M-4.3 -12.2a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0 -3 0" fill="#FFD86A" stroke="#C98A1E" stroke-width=".5"/>
+        <circle r="2.6" fill="#E9B13A"/>
       </symbol>
+      <!-- Kapok bud: the orange-red tip pushing out of a brown calyx. -->
       <symbol id="k-bud" viewBox="-10 -14 20 28" overflow="visible">
-        <path d="M0 -12 C7 -6 7 6 0 12 C-7 6 -7 -6 0 -12 Z" fill="#F07FA3"/>
-        <path d="M-4 8 Q0 15 4 8" fill="#7A5A4C"/>
+        <path d="M0 -13 C6.5 -8 6.5 2 0 6 C-6.5 2 -6.5 -8 0 -13 Z" fill="#E04A2C" stroke="#A9301B" stroke-width=".8"/>
+        <path d="M1.5 -10 C4 -7 4.5 -3 3.5 0" fill="none" stroke="#FF9466" stroke-width="1.2" stroke-linecap="round"/>
+        <path d="M-6.2 -1 C-6 8 -3 12 0 12 C3 12 6 8 6.2 -1 C3 2 -3 2 -6.2 -1 Z" fill="#6B5236" stroke="#4E3B26" stroke-width=".8"/>
       </symbol>
 
       <!-- UI icons (24px grid, stroked with currentColor). Generic glyphs, no brand marks. -->
@@ -276,9 +299,9 @@
       <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></symbol>
       <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
       <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8"/></symbol>
-      <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></symbol>
-      <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8a3 3 0 0 1 6 0"/></symbol>
-      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></symbol>
+      
+      
+      
       <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></symbol>
       <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
       <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
@@ -452,8 +475,8 @@
 
   <main>
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <!-- Depth layers, far to near (plan_20261113 §4.1): sky, sun, far clouds, campus, mid clouds, back cloud bank,
-           [back petals], copy and gowns, front cloud bank, branch, [front petals]. motion.js moves each at its own rate. -->
+      <!-- Depth layers, far to near (plan_20261113 §4.1, kapok-lawn revision): sky, sun, a few clouds, campus on green hills,
+           lawn, [back petals], copy and dress forms, torn-paper edge, kapok branch, [front petals]. motion.js moves each at its own rate. -->
       <div class="hero__sky" aria-hidden="true">
         <div class="sunlight">
           <div class="sun"></div>
@@ -479,29 +502,6 @@
             </g></g>
           </g>
         </svg>
-        <div class="bank bank--back">
-          <svg viewBox="0 0 1600 200" preserveAspectRatio="none" aria-hidden="true">
-            <clipPath id="bank-back"><circle cx="90" cy="140" r="80"/><circle cx="230" cy="120" r="95"/><circle cx="380" cy="138" r="78"/><circle cx="520" cy="118" r="100"/><circle cx="660" cy="140" r="80"/><circle cx="800" cy="122" r="96"/><circle cx="950" cy="140" r="82"/><circle cx="1080" cy="116" r="100"/><circle cx="1230" cy="138" r="80"/><circle cx="1370" cy="120" r="94"/><circle cx="1520" cy="136" r="84"/><rect x="0" y="150" width="1600" height="50"/></clipPath>
-            <g clip-path="url(#bank-back)"><rect width="1600" height="200" fill="#D9E6F3"/><g fill="#F1F6FB"><circle cx="99" cy="129" r="80"/><circle cx="239" cy="109" r="95"/><circle cx="389" cy="127" r="78"/><circle cx="529" cy="107" r="100"/><circle cx="669" cy="129" r="80"/><circle cx="809" cy="111" r="96"/><circle cx="959" cy="129" r="82"/><circle cx="1089" cy="105" r="100"/><circle cx="1239" cy="127" r="80"/><circle cx="1379" cy="109" r="94"/><circle cx="1529" cy="125" r="84"/><rect x="0" y="139" width="1600" height="61"/></g></g>
-          </svg>
-        </div>
-        <svg class="campus" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
-          <path d="M0 250 C120 228 210 240 300 226 C400 212 470 236 560 228 C680 218 760 238 860 226 C980 212 1080 236 1180 224 C1290 212 1370 232 1440 226 L1440 320 L0 320 Z" fill="#DCECF7"/>
-          <g fill="#C4DDF0">
-            <circle cx="380" cy="262" r="40"/><circle cx="430" cy="248" r="50"/><circle cx="486" cy="266" r="36"/>
-            <circle cx="1012" cy="258" r="44"/><circle cx="1066" cy="244" r="54"/><circle cx="1124" cy="262" r="38"/>
-            <path d="M60 320 V232 H330 V320 Z M46 234 L195 198 L344 234 Z"/>
-            <path d="M560 320 V124 H624 V320 Z M550 126 H634 V112 H550 Z M558 112 L592 50 L626 112 Z"/>
-            <path d="M624 320 V214 H980 V320 Z M616 216 H988 V204 H616 Z"/>
-            <path d="M1150 320 V250 H1400 V320 Z M1140 252 L1275 222 L1410 252 Z"/>
-          </g>
-          <g fill="#D8E9F5">
-            <circle cx="592" cy="162" r="17"/>
-            <path d="M86 252 h22 v26 h-22 Z M126 252 h22 v26 h-22 Z M166 252 h22 v26 h-22 Z M206 252 h22 v26 h-22 Z M246 252 h22 v26 h-22 Z M286 252 h22 v26 h-22 Z"/>
-            <path d="M652 236 a12 12 0 0 1 24 0 v30 h-24 Z M700 236 a12 12 0 0 1 24 0 v30 h-24 Z M748 236 a12 12 0 0 1 24 0 v30 h-24 Z M796 236 a12 12 0 0 1 24 0 v30 h-24 Z M844 236 a12 12 0 0 1 24 0 v30 h-24 Z M892 236 a12 12 0 0 1 24 0 v30 h-24 Z M940 236 a12 12 0 0 1 24 0 v30 h-24 Z"/>
-          </g>
-          <path d="M592 162 V150 M592 162 L601 167" stroke="#C4DDF0" stroke-width="2.5" stroke-linecap="round"/>
-        </svg>
         <svg class="clouds clouds--mid" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
           <g>
             <clipPath id="cl-a"><rect x="8" y="0" width="428" height="228"/></clipPath>
@@ -512,15 +512,38 @@
               <g fill="#FFFDF6" opacity=".9"><circle cx="166" cy="176" r="37"/><circle cx="228" cy="146" r="50"/><circle cx="304" cy="156" r="43"/></g>
             </g></g>
           </g>
-          <g>
-            <clipPath id="cl-b"><rect x="794" y="0" width="456" height="364"/></clipPath>
-            <clipPath id="cl-b-b"><circle cx="940" cy="330" r="46"/><circle cx="1010" cy="290" r="70"/><circle cx="1092" cy="300" r="60"/><circle cx="1160" cy="330" r="44"/><circle cx="884" cy="348" r="30"/></clipPath>
-            <g clip-path="url(#cl-b)"><g clip-path="url(#cl-b-b)">
-              <rect x="794" y="0" width="456" height="364" fill="#D7E8F7"/>
-              <g fill="#FFFFFF"><circle cx="949" cy="318" r="46"/><circle cx="1019" cy="278" r="70"/><circle cx="1101" cy="288" r="60"/><circle cx="1169" cy="318" r="44"/><circle cx="893" cy="336" r="30"/></g>
-              <g fill="#FFFDF6" opacity=".9"><circle cx="956" cy="310" r="37"/><circle cx="1026" cy="270" r="56"/><circle cx="1108" cy="280" r="48"/></g>
-            </g></g>
+        </svg>
+        <!-- Campus on green hills (2026-11-14: the client wanted ground, not a cloud sea). Atmospheric, so pale. -->
+        <svg class="campus" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
+          <path d="M0 214 C140 182 260 196 380 176 C520 152 640 190 760 182 C900 172 1000 150 1140 170 C1260 186 1360 168 1440 176 L1440 320 L0 320 Z" fill="#D4E6C2"/>
+          <path d="M0 252 C160 232 300 246 440 236 C600 224 720 248 880 240 C1040 232 1180 246 1300 238 C1360 234 1410 238 1440 242 L1440 320 L0 320 Z" fill="#C2DCAC"/>
+          <g><g fill="#9A8A7C"><path d="M65.4 300 L67.5 127.5 L72.5 127.5 L74.6 300 Z"/><path d="M70 228.7 Q43.5 231 21.7 217.2" fill="none" stroke="#9A8A7C" stroke-width="3.9" stroke-linecap="round"/><path d="M70 228.7 Q96.5 231 127.5 217.2" fill="none" stroke="#9A8A7C" stroke-width="3.9" stroke-linecap="round"/><path d="M70 189.6 Q49.3 191.9 33.2 178.1" fill="none" stroke="#9A8A7C" stroke-width="3.2" stroke-linecap="round"/><path d="M70 189.6 Q90.7 191.9 116 178.1" fill="none" stroke="#9A8A7C" stroke-width="3.2" stroke-linecap="round"/><path d="M70 155.1 Q56.2 157.4 47 143.6" fill="none" stroke="#9A8A7C" stroke-width="2.5" stroke-linecap="round"/><path d="M70 155.1 Q83.8 157.4 102.2 143.6" fill="none" stroke="#9A8A7C" stroke-width="2.5" stroke-linecap="round"/></g><circle cx="14.8" cy="208.7" r="4.5" fill="#E8643B"/><circle cx="24.9" cy="212.3" r="4.6" fill="#F39B6A"/><circle cx="25.2" cy="212.2" r="5.6" fill="#D9512F"/><circle cx="45.3" cy="223" r="4.7" fill="#D9512F"/><circle cx="43.6" cy="224.8" r="5.6" fill="#F08A58"/><circle cx="46.7" cy="217.8" r="4" fill="#D9512F"/><circle cx="133.3" cy="210.9" r="5.5" fill="#D9512F"/><circle cx="133.2" cy="208.8" r="4.7" fill="#F08A58"/><circle cx="132.2" cy="214.1" r="4.1" fill="#F08A58"/><circle cx="98.1" cy="222.5" r="6.3" fill="#D9512F"/><circle cx="102.3" cy="217.2" r="3.8" fill="#F08A58"/><circle cx="99.9" cy="220.6" r="4.8" fill="#E8643B"/><circle cx="38.8" cy="177.6" r="4.7" fill="#F08A58"/><circle cx="35.5" cy="169.6" r="5.1" fill="#E8643B"/><circle cx="31.9" cy="175.5" r="4.7" fill="#F08A58"/><circle cx="44.9" cy="181.3" r="5.4" fill="#E8643B"/><circle cx="52.8" cy="181.9" r="6.1" fill="#D9512F"/><circle cx="49.1" cy="181.4" r="5.1" fill="#D9512F"/><circle cx="122.1" cy="174.5" r="5.6" fill="#F08A58"/><circle cx="117.2" cy="174.9" r="4.6" fill="#F08A58"/><circle cx="120.1" cy="170" r="4" fill="#F39B6A"/><circle cx="86.9" cy="182.4" r="4.1" fill="#E8643B"/><circle cx="99.6" cy="184.1" r="5.4" fill="#E8643B"/><circle cx="92.2" cy="180.7" r="4.1" fill="#F39B6A"/><circle cx="52.3" cy="135.4" r="6.1" fill="#F39B6A"/><circle cx="50.6" cy="141.1" r="3.7" fill="#E8643B"/><circle cx="41.1" cy="143.6" r="5.4" fill="#E8643B"/><circle cx="58.1" cy="147.1" r="5.6" fill="#E8643B"/><circle cx="60.1" cy="149.5" r="4.7" fill="#F39B6A"/><circle cx="49.6" cy="147.1" r="3.7" fill="#F39B6A"/><circle cx="104.1" cy="135.1" r="3.7" fill="#F39B6A"/><circle cx="97.9" cy="134.7" r="5.2" fill="#D9512F"/><circle cx="99" cy="141.6" r="4.3" fill="#D9512F"/><circle cx="79" cy="144.6" r="5.6" fill="#D9512F"/><circle cx="85.2" cy="151.3" r="4" fill="#F39B6A"/><circle cx="80.1" cy="145.3" r="6.1" fill="#E8643B"/><circle cx="75.3" cy="115" r="6.4" fill="#F39B6A"/><circle cx="73.7" cy="119" r="4.4" fill="#D9512F"/><circle cx="75.3" cy="119.2" r="4.3" fill="#F08A58"/><circle cx="68.4" cy="131.6" r="4.6" fill="#D9512F"/><circle cx="66.3" cy="133.6" r="5.7" fill="#F08A58"/><circle cx="58.9" cy="133.8" r="6.4" fill="#F39B6A"/><circle cx="79.9" cy="126.4" r="6.2" fill="#E8643B"/><circle cx="80.1" cy="133.2" r="5.1" fill="#D9512F"/><circle cx="81.8" cy="125.7" r="5" fill="#E8643B"/></g>
+          <g><g fill="#9A8A7C"><path d="M1373.8 300 L1375.7 142.5 L1380.3 142.5 L1382.2 300 Z"/><path d="M1378 234.9 Q1353.8 237 1327.6 224.4" fill="none" stroke="#9A8A7C" stroke-width="3.6" stroke-linecap="round"/><path d="M1378 234.9 Q1402.2 237 1424.2 224.4" fill="none" stroke="#9A8A7C" stroke-width="3.6" stroke-linecap="round"/><path d="M1378 199.2 Q1359.1 201.3 1338.1 188.7" fill="none" stroke="#9A8A7C" stroke-width="2.9" stroke-linecap="round"/><path d="M1378 199.2 Q1396.9 201.3 1413.7 188.7" fill="none" stroke="#9A8A7C" stroke-width="2.9" stroke-linecap="round"/><path d="M1378 167.7 Q1365.4 169.8 1350.7 157.2" fill="none" stroke="#9A8A7C" stroke-width="2.3" stroke-linecap="round"/><path d="M1378 167.7 Q1390.6 169.8 1401.1 157.2" fill="none" stroke="#9A8A7C" stroke-width="2.3" stroke-linecap="round"/></g><circle cx="1326.9" cy="223" r="5" fill="#D9512F"/><circle cx="1328.4" cy="220.1" r="5.3" fill="#F08A58"/><circle cx="1330.8" cy="224.2" r="4.1" fill="#D9512F"/><circle cx="1347.7" cy="225.7" r="4.1" fill="#E8643B"/><circle cx="1353.4" cy="228.1" r="3.5" fill="#F39B6A"/><circle cx="1355.5" cy="224.1" r="5.7" fill="#D9512F"/><circle cx="1430" cy="224.2" r="5.3" fill="#D9512F"/><circle cx="1427" cy="216.9" r="3.5" fill="#E8643B"/><circle cx="1418.9" cy="223.5" r="3.6" fill="#E8643B"/><circle cx="1405.9" cy="223.8" r="3.8" fill="#E8643B"/><circle cx="1400.8" cy="226.1" r="4" fill="#F08A58"/><circle cx="1410.8" cy="228.2" r="5.1" fill="#F39B6A"/><circle cx="1336.8" cy="185.2" r="3.5" fill="#E8643B"/><circle cx="1342" cy="180.5" r="3.7" fill="#F39B6A"/><circle cx="1338.2" cy="187.7" r="3.9" fill="#D9512F"/><circle cx="1353.1" cy="195.4" r="4" fill="#D9512F"/><circle cx="1357.9" cy="192" r="5.9" fill="#E8643B"/><circle cx="1356.1" cy="193.4" r="3.4" fill="#E8643B"/><circle cx="1412.6" cy="187.9" r="4" fill="#F39B6A"/><circle cx="1417.2" cy="182.3" r="4.5" fill="#F39B6A"/><circle cx="1419.5" cy="182" r="5" fill="#D9512F"/><circle cx="1396.9" cy="192.6" r="4.6" fill="#F08A58"/><circle cx="1399.6" cy="190" r="5" fill="#D9512F"/><circle cx="1401.7" cy="188.6" r="5.5" fill="#F39B6A"/><circle cx="1349.9" cy="153.1" r="5.8" fill="#F39B6A"/><circle cx="1348.9" cy="156.5" r="4.2" fill="#F39B6A"/><circle cx="1353.3" cy="151" r="5.8" fill="#F39B6A"/><circle cx="1360.4" cy="162.5" r="5.4" fill="#E8643B"/><circle cx="1369.4" cy="157.8" r="5" fill="#D9512F"/><circle cx="1364.6" cy="160.8" r="5.6" fill="#D9512F"/><circle cx="1405.8" cy="154.9" r="5.1" fill="#F08A58"/><circle cx="1399.8" cy="155.6" r="4.8" fill="#E8643B"/><circle cx="1406.1" cy="150.3" r="4.2" fill="#D9512F"/><circle cx="1396.6" cy="163.6" r="4.1" fill="#F39B6A"/><circle cx="1385.6" cy="163.4" r="4.4" fill="#E8643B"/><circle cx="1394.3" cy="157" r="3.8" fill="#E8643B"/><circle cx="1383.6" cy="132.4" r="3.8" fill="#E8643B"/><circle cx="1379.6" cy="138.2" r="5.4" fill="#D9512F"/><circle cx="1381.2" cy="137.2" r="4.2" fill="#D9512F"/><circle cx="1377.4" cy="146.3" r="4.8" fill="#F39B6A"/><circle cx="1374.3" cy="144.7" r="4.9" fill="#E8643B"/><circle cx="1366" cy="145.7" r="3.9" fill="#D9512F"/><circle cx="1382.2" cy="146.9" r="4.9" fill="#D9512F"/><circle cx="1389.3" cy="146.8" r="5.6" fill="#E8643B"/><circle cx="1387.8" cy="145.4" r="5.4" fill="#D9512F"/></g>
+          <g fill="#B3D39C">
+            <circle cx="380" cy="262" r="40"/><circle cx="430" cy="248" r="50"/><circle cx="486" cy="266" r="36"/>
+            <circle cx="1012" cy="258" r="44"/><circle cx="1066" cy="244" r="54"/><circle cx="1124" cy="262" r="38"/>
           </g>
+          <g fill="#C8E2B4"><circle cx="440" cy="236" r="30"/><circle cx="1078" cy="232" r="32"/></g>
+          <g fill="#BCD3E6">
+            <path d="M60 320 V232 H330 V320 Z M46 234 L195 198 L344 234 Z"/>
+            <path d="M560 320 V124 H624 V320 Z M550 126 H634 V112 H550 Z M558 112 L592 50 L626 112 Z"/>
+            <path d="M624 320 V214 H980 V320 Z M616 216 H988 V204 H616 Z"/>
+            <path d="M1150 320 V250 H1400 V320 Z M1140 252 L1275 222 L1410 252 Z"/>
+          </g>
+          <g fill="#DCEAF5">
+            <circle cx="592" cy="162" r="17"/>
+            <path d="M86 252 h22 v26 h-22 Z M126 252 h22 v26 h-22 Z M166 252 h22 v26 h-22 Z M206 252 h22 v26 h-22 Z M246 252 h22 v26 h-22 Z M286 252 h22 v26 h-22 Z"/>
+            <path d="M652 236 a12 12 0 0 1 24 0 v30 h-24 Z M700 236 a12 12 0 0 1 24 0 v30 h-24 Z M748 236 a12 12 0 0 1 24 0 v30 h-24 Z M796 236 a12 12 0 0 1 24 0 v30 h-24 Z M844 236 a12 12 0 0 1 24 0 v30 h-24 Z M892 236 a12 12 0 0 1 24 0 v30 h-24 Z M940 236 a12 12 0 0 1 24 0 v30 h-24 Z"/>
+          </g>
+          <path d="M592 162 V150 M592 162 L601 167" stroke="#BCD3E6" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <!-- Lawn the dress forms stand on. Anchored at its crest so the horizon never gets cropped. -->
+        <svg class="lawn" viewBox="0 0 1440 200" preserveAspectRatio="xMidYMin slice">
+          <defs><linearGradient id="lawn-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9E3A6"/><stop offset="1" stop-color="#93C46F"/></linearGradient></defs>
+          <path d="M0 24 C160 10 320 18 480 12 C660 6 820 20 980 14 C1140 8 1300 18 1440 10 L1440 200 L0 200 Z" fill="url(#lawn-fill)"/>
+          <path d="M-260.2 14 L-57.4 14 L-200 200 L-440 200 Z M145.4 14 L348.2 14 L280 200 L40 200 Z M551 14 L753.8 14 L760 200 L520 200 Z M956.6 14 L1159.4 14 L1240 200 L1000 200 Z M1362.2 14 L1565 14 L1720 200 L1480 200 Z" fill="#FFFFFF" opacity=".08"/>
+          <path d="M0 24 C160 10 320 18 480 12 C660 6 820 20 980 14 C1140 8 1300 18 1440 10" fill="none" stroke="#E2F1CC" stroke-width="3"/>
+          <g><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1134.4 50.7) rotate(180.3) scale(0.3 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1159.2 95.5) rotate(284.6) scale(0.4 0.2)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1028.9 163.1) rotate(68.5) scale(0.5 0.3)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1018.8 57.6) rotate(341.5) scale(0.2 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1338.5 43.9) rotate(94.3) scale(0.2 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1319.4 157.8) rotate(99.7) scale(0.5 0.3)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(309.6 40.2) rotate(201.4) scale(0.2 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(232.5 81.2) rotate(81.6) scale(0.3 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(114.8 42.2) rotate(226.6) scale(0.2 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(676.4 149.1) rotate(183.9) scale(0.4 0.2)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(992.5 90.3) rotate(347.5) scale(0.3 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1088.1 170.7) rotate(217.2) scale(0.4 0.2)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(1131.7 60) rotate(261.6) scale(0.2 0.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(919.5 96.4) rotate(139.3) scale(0.3 0.1)"/></g>
         </svg>
       </div>
 
@@ -541,64 +564,70 @@
         </div>
 
         <div class="hero__stage">
-          <!-- Each gown is its own layer so the pointer can set them at different depths without repainting the grain. -->
-          <div class="rig" role="img" aria-label="學士服、碩士服、博士服插畫">
+          <!-- Gowns on dress forms standing on the lawn (2026-11-14: empty gowns floating among clouds read as ill-omened).
+               Each unit is its own layer so the pointer can set them at different depths without repainting the grain. -->
+          <div class="rig" role="img" aria-label="學士服、碩士服、博士服，穿在人台上立於草地">
             <div class="rig__glow"></div>
-            <div class="rig__floor"></div>
             <div class="gown gown--bachelor">
               <span class="gown__shadow"></span>
-              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-black trim-silver" href="#k-bachelor" width="400" height="720"/></g></svg>
-              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+              <svg class="gown__art" viewBox="0 0 400 800" aria-hidden="true"><use href="#k-form-stand"/><g class="cw-black trim-silver" filter="url(#k-grain)"><use href="#k-neck"/><use href="#k-form-neck"/><use href="#k-sleeves"/><use href="#k-body"/><use href="#k-stole"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 800" aria-hidden="true">
                 <mask id="sheen-bachelor" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-black trim-silver" href="#k-bachelor" width="400" height="720" filter="url(#k-silhouette)"/></mask>
                 <g mask="url(#sheen-bachelor)"><rect class="sheen__band" style="--d:0s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
               </svg>
             </div>
             <div class="gown gown--doctor">
               <span class="gown__shadow"></span>
-              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-crimson" href="#k-doctor" width="400" height="720"/></g></svg>
-              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+              <svg class="gown__art" viewBox="0 0 400 800" aria-hidden="true"><use href="#k-form-stand"/><g class="cw-crimson" filter="url(#k-grain)"><use href="#k-neck"/><use href="#k-form-neck"/><use href="#k-sleeves-dr"/><use href="#k-body"/><use href="#k-yoke"/><use href="#k-facings"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 800" aria-hidden="true">
                 <mask id="sheen-doctor" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-crimson" href="#k-doctor" width="400" height="720" filter="url(#k-silhouette)"/></mask>
                 <g mask="url(#sheen-doctor)"><rect class="sheen__band" style="--d:.28s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
               </svg>
             </div>
             <div class="gown gown--master">
               <span class="gown__shadow"></span>
-              <svg class="gown__art" viewBox="0 0 400 720" aria-hidden="true"><g filter="url(#k-grain)"><use class="cw-black trim-gold" href="#k-master" width="400" height="720"/></g></svg>
-              <svg class="gown__sheen" viewBox="0 0 400 720" aria-hidden="true">
+              <svg class="gown__art" viewBox="0 0 400 800" aria-hidden="true"><use href="#k-form-stand"/><g class="cw-black trim-gold" filter="url(#k-grain)"><use href="#k-neck"/><use href="#k-form-neck"/><use href="#k-sleeves"/><use href="#k-body"/><use href="#k-hood"/><use href="#k-plum"/></g></svg>
+              <svg class="gown__sheen" viewBox="0 0 400 800" aria-hidden="true">
                 <mask id="sheen-master" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="720"><use class="cw-black trim-gold" href="#k-master" width="400" height="720" filter="url(#k-silhouette)"/></mask>
                 <g mask="url(#sheen-master)"><rect class="sheen__band" style="--d:.14s" x="-50" y="-80" width="100" height="880" fill="url(#k-sheen)"/></g>
               </svg>
             </div>
             <!-- Caps share one layer so the opening toss can fly them across the whole stage; order matches the gowns, left to right. -->
-            <svg class="hero__caps" viewBox="0 0 1000 800" aria-hidden="true">
-              <g class="cap cap-black tassel-silver"><use href="#k-cap" x="103.6" y="139.4" width="172.8" height="144"/></g>
-              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="404" y="102" width="192" height="160"/></g>
-              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="723.6" y="139.4" width="172.8" height="144"/></g>
+            <svg class="hero__caps" viewBox="0 0 1000 900" aria-hidden="true">
+              <g class="cap cap-black tassel-silver"><use href="#k-cap" x="103.6" y="169.4" width="172.8" height="144"/></g>
+              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="404" y="106" width="192" height="160"/></g>
+              <g class="cap cap-black tassel-gold"><use href="#k-cap" x="723.6" y="169.4" width="172.8" height="144"/></g>
             </svg>
           </div>
         </div>
       </div>
 
-      <div class="hero__bank" aria-hidden="true">
-        <div class="bank bank--front">
-          <svg viewBox="0 0 1600 200" aria-hidden="true">
-            <clipPath id="bank-front"><circle cx="40" cy="150" r="70"/><circle cx="150" cy="135" r="85"/><circle cx="290" cy="145" r="75"/><circle cx="410" cy="128" r="95"/><circle cx="560" cy="148" r="70"/><circle cx="680" cy="132" r="88"/><circle cx="820" cy="146" r="72"/><circle cx="950" cy="126" r="98"/><circle cx="1100" cy="147" r="74"/><circle cx="1220" cy="134" r="86"/><circle cx="1360" cy="144" r="76"/><circle cx="1490" cy="130" r="92"/><circle cx="1600" cy="148" r="70"/><rect x="0" y="150" width="1600" height="50"/></clipPath>
-            <g clip-path="url(#bank-front)"><rect width="1600" height="200" fill="#ECE8F0"/><g fill="#FFFDF9"><circle cx="49" cy="139" r="70"/><circle cx="159" cy="124" r="85"/><circle cx="299" cy="134" r="75"/><circle cx="419" cy="117" r="95"/><circle cx="569" cy="137" r="70"/><circle cx="689" cy="121" r="88"/><circle cx="829" cy="135" r="72"/><circle cx="959" cy="115" r="98"/><circle cx="1109" cy="136" r="74"/><circle cx="1229" cy="123" r="86"/><circle cx="1369" cy="133" r="76"/><circle cx="1499" cy="119" r="92"/><circle cx="1609" cy="137" r="70"/><rect x="0" y="139" width="1600" height="61"/></g></g>
+      <!-- Torn washi edge (2026-11-14, replaces the cloud bank): at rest a strip along the bottom, on scroll it rises
+           over the scene like the next sheet of paper. Its colour is the page paper, so it melts into 關於我們. -->
+      <div class="hero__paper" aria-hidden="true">
+        <div class="paper">
+          <svg viewBox="0 0 1440 30" preserveAspectRatio="none">
+            <path d="M0 30 L0 16 L10 13.4 L20 9.6 L29.6 12.2 L41.4 10.8 L55.5 10.1 L64.9 9 L80.6 16.8 L89.9 15.9 L101.5 12.6 L117.8 16.2 L126.8 17.9 L137.5 14.8 L149.9 9.3 L160.3 15.8 L175.3 11.2 L191.2 16.3 L202.7 13.1 L214.1 11.3 L230.2 16.8 L244.6 13.5 L260.5 16.4 L276 15.8 L292.8 15.2 L304.1 15.4 L315.7 16.8 L326 16.6 L340.2 16.3 L353 16.2 L368.6 9.4 L379.5 10.8 L388.7 14.2 L404.2 14.6 L420 16.8 L435.5 10.9 L449 13.1 L461.1 13.8 L476.1 13.7 L488.2 13.5 L499.1 15.3 L514.3 11.7 L525.3 14.5 L538.7 17.4 L552.3 11.8 L566.1 14.2 L580.2 14.1 L590.5 10.9 L600.4 12 L614.5 16.9 L628.6 12.5 L640.4 12.6 L650.4 10.4 L659.8 13.3 L671.8 9.8 L685.9 12.6 L698.6 9.9 L714.3 11.5 L725.7 10.1 L736.4 12.9 L747 14.5 L760.6 15.8 L775.9 13.4 L791.8 15.2 L801.8 14.6 L816.6 17 L830.3 17.7 L841.6 18 L850.9 9.9 L862.4 16.7 L878.6 15.5 L891.9 11.2 L905.2 16 L915.7 16.3 L930.2 14.2 L946.8 11.8 L956 15.6 L969.1 14.5 L983.6 15.1 L993 15.4 L1009.9 16.6 L1024.3 14.1 L1035 14.7 L1048.6 13 L1057.8 16.8 L1072 17.8 L1083.4 15.7 L1100 14.1 L1113.9 10.8 L1124.9 13 L1137.3 9.4 L1150.9 16 L1166.6 9.8 L1178 14.5 L1190.4 11.9 L1201.7 9.7 L1213.7 12.9 L1227.8 13.5 L1241.1 12.9 L1255.1 17.1 L1271.7 13.2 L1287.3 17.8 L1301.5 12.6 L1315.5 9.5 L1326.8 9.3 L1342.6 10 L1353.5 15 L1364.3 11.4 L1374.4 15.8 L1385.8 14.6 L1400.9 9.1 L1416.5 17.2 L1431.6 17.6 L1440 14 L1440 30 Z" fill="#5A4636" opacity=".14" transform="translate(0 -3)"/>
+            <path d="M0 30 L0 16 L10 13.4 L20 9.6 L29.6 12.2 L41.4 10.8 L55.5 10.1 L64.9 9 L80.6 16.8 L89.9 15.9 L101.5 12.6 L117.8 16.2 L126.8 17.9 L137.5 14.8 L149.9 9.3 L160.3 15.8 L175.3 11.2 L191.2 16.3 L202.7 13.1 L214.1 11.3 L230.2 16.8 L244.6 13.5 L260.5 16.4 L276 15.8 L292.8 15.2 L304.1 15.4 L315.7 16.8 L326 16.6 L340.2 16.3 L353 16.2 L368.6 9.4 L379.5 10.8 L388.7 14.2 L404.2 14.6 L420 16.8 L435.5 10.9 L449 13.1 L461.1 13.8 L476.1 13.7 L488.2 13.5 L499.1 15.3 L514.3 11.7 L525.3 14.5 L538.7 17.4 L552.3 11.8 L566.1 14.2 L580.2 14.1 L590.5 10.9 L600.4 12 L614.5 16.9 L628.6 12.5 L640.4 12.6 L650.4 10.4 L659.8 13.3 L671.8 9.8 L685.9 12.6 L698.6 9.9 L714.3 11.5 L725.7 10.1 L736.4 12.9 L747 14.5 L760.6 15.8 L775.9 13.4 L791.8 15.2 L801.8 14.6 L816.6 17 L830.3 17.7 L841.6 18 L850.9 9.9 L862.4 16.7 L878.6 15.5 L891.9 11.2 L905.2 16 L915.7 16.3 L930.2 14.2 L946.8 11.8 L956 15.6 L969.1 14.5 L983.6 15.1 L993 15.4 L1009.9 16.6 L1024.3 14.1 L1035 14.7 L1048.6 13 L1057.8 16.8 L1072 17.8 L1083.4 15.7 L1100 14.1 L1113.9 10.8 L1124.9 13 L1137.3 9.4 L1150.9 16 L1166.6 9.8 L1178 14.5 L1190.4 11.9 L1201.7 9.7 L1213.7 12.9 L1227.8 13.5 L1241.1 12.9 L1255.1 17.1 L1271.7 13.2 L1287.3 17.8 L1301.5 12.6 L1315.5 9.5 L1326.8 9.3 L1342.6 10 L1353.5 15 L1364.3 11.4 L1374.4 15.8 L1385.8 14.6 L1400.9 9.1 L1416.5 17.2 L1431.6 17.6 L1440 14 L1440 30 Z" fill="#FFFDF9"/>
           </svg>
         </div>
       </div>
 
       <svg class="hero__branch" viewBox="0 0 660 440" aria-hidden="true">
         <g class="sway">
-          <g fill="#6E5452">
-            <path d="M664 -20 C560 18 470 58 398 106 C326 156 248 196 150 226 C108 238 68 248 22 250 L24 262 C72 262 112 254 154 244 C254 214 334 176 404 128 C474 82 562 44 668 10 Z"/>
-            <path d="M420 112 C410 80 396 56 372 34 L378 30 C404 50 420 76 428 108 Z"/>
-            <path d="M300 168 C292 210 276 250 248 296 L240 292 C264 248 280 208 290 172 Z"/>
-            <path d="M520 58 C536 88 548 118 552 156 L544 158 C540 122 528 92 512 62 Z"/>
+          <g fill="#6B5A4E" stroke="#4E4037" stroke-width="1.5" stroke-linejoin="round">
+            <path d="M704 -28 C604 6 522 48 452 94 C402 128 362 158 318 184 L328 198 C374 172 416 144 464 112 C534 66 612 28 708 2 Z"/>
+            <path d="M444 104 C436 84 434 62 440 40 L452 42 C448 64 450 84 458 100 Z"/>
+            <path d="M388 140 C376 124 366 108 360 92 L372 88 C376 104 386 120 398 134 Z"/>
+            <path d="M540 62 C540 44 544 26 552 10 L562 16 C556 30 552 46 552 60 Z"/>
+            <path d="M612 30 C616 18 622 8 630 0 L638 8 C630 14 626 24 622 34 Z"/>
+            <path d="M416 126 C424 140 428 156 428 170 L418 172 C418 158 414 144 406 132 Z"/>
           </g>
-          <path d="M664 -14 C560 22 470 62 400 110 C328 160 250 200 152 230" fill="none" stroke="#8C716C" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>
-          <use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(20 258) rotate(-30) scale(0.8)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(96 270) rotate(20) scale(0.7)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(232 306) rotate(10) scale(0.8)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(364 22) rotate(-20) scale(0.7)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(566 168) rotate(30) scale(0.7)"/>
-          <use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(40 252) rotate(10) scale(0.55)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(80 240) rotate(40) scale(0.7)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(118 230) rotate(-20) scale(0.6)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(150 250) rotate(15) scale(0.8)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(190 218) rotate(60) scale(0.75)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(230 204) rotate(-10) scale(0.9)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(262 232) rotate(30) scale(0.6)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(250 292) rotate(0) scale(0.7)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(272 262) rotate(50) scale(0.55)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(300 186) rotate(20) scale(0.85)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(338 160) rotate(-30) scale(0.7)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(372 36) rotate(10) scale(0.6)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(388 66) rotate(45) scale(0.75)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(410 98) rotate(-15) scale(0.8)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(440 110) rotate(25) scale(0.7)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(470 80) rotate(5) scale(0.9)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(500 60) rotate(-40) scale(0.65)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(540 96) rotate(15) scale(0.75)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(552 150) rotate(35) scale(0.7)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(520 38) rotate(0) scale(0.6)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(590 30) rotate(20) scale(0.8)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(620 16) rotate(-25) scale(0.6)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(360 140) rotate(70) scale(0.65)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(206 244) rotate(0) scale(0.5)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(120 262) rotate(20) scale(0.5)"/>
+          <path d="M704 -20 C606 14 524 56 454 100 C404 134 364 164 322 190" fill="none" stroke="#8F7D70" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+          <use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(452 28) rotate(8) scale(1.1)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(368 80) rotate(-18) scale(1)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(560 2) rotate(20) scale(1)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(292 200) rotate(-46) scale(1)"/><use href="#k-bud" width="20" height="28" x="-10" y="-14" transform="translate(430 182) rotate(160) scale(0.9)"/>
+          <use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(436 46) rotate(8) scale(1.05 1.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(470 64) rotate(-24) scale(0.8 0.5)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(356 98) rotate(-6) scale(0.95 0.9)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(332 124) rotate(20) scale(0.7 0.4)"/>
+          <use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(548 18) rotate(12) scale(0.9 0.9)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(584 36) rotate(-30) scale(0.72 0.5)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(624 8) rotate(4) scale(0.8 0.8)"/>
+          <use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(318 190) rotate(-10) scale(1.08 1.1)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(290 168) rotate(26) scale(0.68 0.4)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(352 212) rotate(40) scale(0.66 0.4)"/><use href="#k-blossom" width="72" height="72" x="-36" y="-36" transform="translate(426 168) rotate(-14) scale(0.62 0.4)"/>
         </g>
       </svg>
 
@@ -793,7 +822,7 @@
               <path d="M332 444 C338 444 344 448 346 454 M390 436 C396 436 402 440 404 446" fill="none" stroke="#B98068" stroke-width="1" stroke-linecap="round"/>
               </g>
             </g>
-            <g transform="translate(140 140) rotate(30)"><path class="drift" style="--i:0" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(500 120) rotate(-20)"><path class="drift" style="--i:1" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(330 100) rotate(60)"><path class="drift" style="--i:2" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(120 330) rotate(-50)"><path class="drift" style="--i:3" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g><g transform="translate(520 300) rotate(10)"><path class="drift" style="--i:4" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#F9C3D3"/></g>
+            <g transform="translate(140 140) rotate(30)"><path class="drift" style="--i:0" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#EE6A3F"/></g><g transform="translate(500 120) rotate(-20)"><path class="drift" style="--i:1" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#EE6A3F"/></g><g transform="translate(330 100) rotate(60)"><path class="drift" style="--i:2" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#EE6A3F"/></g><g transform="translate(120 330) rotate(-50)"><path class="drift" style="--i:3" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#EE6A3F"/></g><g transform="translate(520 300) rotate(10)"><path class="drift" style="--i:4" d="M0 0 C-5 -4 -6 -10 -4 -14 Q-1.5 -15 0 -12 Q1.5 -15 4 -14 C6 -10 5 -4 0 0 Z" fill="#EE6A3F"/></g>
           </g>
           <path d="M84 580 L84 280 A236 236 0 0 1 556 280 L556 580 Z" fill="none" stroke="#D9C6B6" stroke-width="9" stroke-linejoin="round"/>
           <path d="M90 576 L90 280 A230 230 0 0 1 550 280 L550 576" fill="none" stroke="#FFFDF9" stroke-width="2" opacity=".8"/>
@@ -1047,30 +1076,16 @@
           <p class="section-head__en" lang="en">Contact</p>
           <h2 id="contact-title">聯絡我們</h2>
         </header>
+        <!-- 2026-11-13: the client kept only the details; map, link cards and buttons removed. The address opens directions. -->
         <div class="contact__card" data-reveal>
-          <div class="contact__info">
-            <p class="contact__company">黑美人服飾開發有限公司<span lang="en">Black A Beauty</span></p>
-            <dl class="contact__list">
-              <div><dt><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>電話</dt><dd><a href="tel:073493832">(07)3493832</a>、<a href="tel:073597082">3597082</a>、<a href="tel:073597036">3597036</a></dd></div>
-              <div><dt><svg class="icon" aria-hidden="true"><use href="#i-fax"/></svg>傳真</dt><dd>(07)3104329、3426879</dd></div>
-              <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mobile"/></svg>行動</dt><dd><a href="tel:0933907593">0933-907-593</a></dd></div>
-              <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>信箱</dt><dd class="contact__email"><a href="mailto:yes_blackabeauty_yes@yahoo.com.tw">yes_blackabeauty_yes@<wbr>yahoo.com.tw</a></dd></div>
-              <div><dt><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>地址</dt><dd>高雄市三民區鼎貴路62巷14號</dd></div>
-            </dl>
-            <ul class="contact__links">
-              <li><a href="http://www.blackabeauty.com.tw" target="_blank" rel="noopener"><b><svg class="icon" aria-hidden="true"><use href="#i-globe"/></svg>官網</b><span>http://www.blackabeauty.com.tw</span></a></li>
-              <li><a href="https://www.facebook.com/pages/%E9%BB%91%E7%BE%8E%E4%BA%BA%E6%9C%8D%E9%A3%BE%E9%96%8B%E7%99%BC%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8/559226934194966" target="_blank" rel="noopener"><b><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>ＦＢ</b><span>Facebook 粉絲頁</span></a></li>
-              <li><a href="https://tw.bid.yahoo.com/tw/booth/Y3789989705" target="_blank" rel="noopener"><b><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>奇摩拍賣</b><span>https://tw.bid.yahoo.com/tw/booth/Y3789989705</span></a></li>
-              <li><a href="http://blackabeauty999.blogspot.tw/" target="_blank" rel="noopener"><b><svg class="icon" aria-hidden="true"><use href="#i-pen"/></svg>Blogger</b><span>http://blackabeauty999.blogspot.tw/</span></a></li>
-            </ul>
-            <div class="contact__actions">
-              <a class="btn btn--primary" href="tel:073493832"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>撥打 (07)3493832</a>
-              <a class="btn btn--ghost" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E9%AB%98%E9%9B%84%E5%B8%82%E4%B8%89%E6%B0%91%E5%8D%80%E9%BC%8E%E8%B2%B4%E8%B7%AF62%E5%B7%B714%E8%99%9F" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>門市導航</a>
-            </div>
-          </div>
-          <div class="contact__map">
-            <iframe title="黑美人服飾開發有限公司地圖：高雄市三民區鼎貴路62巷14號" src="https://www.google.com/maps?q=%E9%AB%98%E9%9B%84%E5%B8%82%E4%B8%89%E6%B0%91%E5%8D%80%E9%BC%8E%E8%B2%B4%E8%B7%AF62%E5%B7%B714%E8%99%9F&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-          </div>
+          <p class="contact__company">黑美人服飾開發有限公司<span lang="en">Black A Beauty</span></p>
+          <dl class="contact__list">
+            <div><dt><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>電話</dt><dd><a href="tel:073493832">(07)3493832</a>、<a href="tel:073597082">3597082</a>、<a href="tel:073597036">3597036</a></dd></div>
+            <div><dt><svg class="icon" aria-hidden="true"><use href="#i-fax"/></svg>傳真</dt><dd>(07)3104329、3426879</dd></div>
+            <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mobile"/></svg>行動</dt><dd><a href="tel:0933907593">0933-907-593</a></dd></div>
+            <div><dt><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>信箱</dt><dd class="contact__email"><a href="mailto:yes_blackabeauty_yes@yahoo.com.tw">yes_blackabeauty_yes@<wbr>yahoo.com.tw</a></dd></div>
+            <div><dt><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>地址</dt><dd><a href="https://www.google.com/maps/dir/?api=1&amp;destination=%E9%AB%98%E9%9B%84%E5%B8%82%E4%B8%89%E6%B0%91%E5%8D%80%E9%BC%8E%E8%B2%B4%E8%B7%AF62%E5%B7%B714%E8%99%9F" target="_blank" rel="noopener">高雄市三民區鼎貴路62巷14號<span class="sr-only">（以 Google 地圖導航）</span></a></dd></div>
+          </dl>
         </div>
       </div>
     </section>
